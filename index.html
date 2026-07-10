@@ -6,46 +6,62 @@
 <title>ระบบแจ้งซ่อม — คณะสัตวแพทยศาสตร์ ม.อ.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.31.0/tabler-icons.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f4f0;--surf:#fff;--surf2:#f0efe9;--surf3:#e8e6de;
-  --bd:rgba(0,0,0,0.1);--bd2:rgba(0,0,0,0.18);
-  --tx:#111110;--tx2:#5a5955;--tx3:#999891;
+  --bg:#f4f2ec;--surf:#fff;--surf2:#f3f1ea;--surf3:#e9e6dd;
+  --bd:rgba(24,22,18,0.09);--bd2:rgba(24,22,18,0.16);
+  --tx:#17150f;--tx2:#5c584e;--tx3:#9a968a;
+  --navy:#12233b;
   --blue:#185fa5;--blue-bg:#e6f1fb;--blue-tx:#0c447c;
   --green:#3b6d11;--green-bg:#eaf3de;--green-tx:#27500a;
-  --amber:#854f0b;--amber-bg:#faeeda;--amber-tx:#633806;
+  --amber:#9a5a09;--amber-bg:#faeeda;--amber-tx:#633806;
   --red:#a32d2d;--red-bg:#fcebeb;--red-tx:#791f1f;
   --purple:#534ab7;--purple-bg:#eeedfe;--purple-tx:#3c3489;
   --teal:#0f6e56;--teal-bg:#e1f5ee;--teal-tx:#085041;
-  --r:8px;--rl:12px;
+  --accent:#0f6e56;--accent-soft:#e1f5ee;
+  --r:9px;--rl:14px;--rx:20px;
+  --sh1:0 1px 2px rgba(24,22,18,.05),0 1px 3px rgba(24,22,18,.04);
+  --sh2:0 2px 6px rgba(24,22,18,.06),0 4px 14px rgba(24,22,18,.05);
+  --sh3:0 8px 30px rgba(24,22,18,.13);
   --font:'IBM Plex Sans Thai','Sarabun',sans-serif;
   --mono:'IBM Plex Mono',monospace;
 }
-body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.55;min-height:100vh}
+body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.55;min-height:100vh;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent-soft);color:var(--teal-tx)}
 
 /* NAV */
-.nav{background:#0f1a2e;color:#fff;display:flex;align-items:center;height:54px;padding:0 1.25rem;gap:4px;position:sticky;top:0;z-index:100;box-shadow:0 1px 12px rgba(0,0,0,0.3)}
-.nav-logo{font-weight:700;font-size:14px;color:#fff;padding-right:14px;border-right:1px solid rgba(255,255,255,0.12);margin-right:8px;white-space:nowrap;flex-shrink:0;line-height:1.3}
-.nav-logo small{color:#7ecbb4;font-size:10px;font-weight:400;display:block}
-.ntab{padding:6px 13px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;border-radius:6px;border:none;background:transparent;font-family:var(--font);white-space:nowrap;transition:all .15s;flex-shrink:0}
-.ntab:hover{color:#fff;background:rgba(255,255,255,0.08)}
-.ntab.on{color:#fff;background:rgba(255,255,255,0.13)}
-.nav-r{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
-.ubadge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
-.ua{background:rgba(126,203,180,0.25);color:#7ecbb4}
-.ut{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75)}
-.nbtn{font-size:12px;padding:5px 13px;border-radius:6px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:rgba(255,255,255,0.65);cursor:pointer;font-family:var(--font);transition:all .15s}
-.nbtn:hover{background:rgba(255,255,255,0.1);color:#fff}
+.nav{background:var(--navy);color:#fff;display:flex;align-items:center;height:56px;padding:0 1.1rem;gap:3px;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 4px 20px rgba(18,35,59,.28)}
+.nav-logo{font-weight:700;font-size:14px;color:#fff;padding-right:14px;border-right:1px solid rgba(255,255,255,0.14);margin-right:8px;white-space:nowrap;flex-shrink:0;line-height:1.25;display:flex;flex-direction:column;justify-content:center}
+.nav-logo small{color:#6fd6b6;font-size:10px;font-weight:400;letter-spacing:.2px}
+.ntab{padding:7px 13px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,0.58);cursor:pointer;border-radius:8px;border:none;background:transparent;font-family:var(--font);white-space:nowrap;transition:all .16s;flex-shrink:0;position:relative}
+.ntab:hover{color:#fff;background:rgba(255,255,255,0.09)}
+.ntab.on{color:var(--navy);background:#6fd6b6}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0}
+.ubadge{font-size:11px;padding:4px 11px;border-radius:20px;font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.ubadge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.9}
+.ua{background:rgba(111,214,182,0.2);color:#6fd6b6}
+.ut{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.82)}
+.nbtn{font-size:12px;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:rgba(255,255,255,0.72);cursor:pointer;font-family:var(--font);transition:all .16s;font-weight:500}
+.nbtn:hover{background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.3)}
 
 /* LAYOUT */
-.pg{padding:1.25rem;max-width:1100px;margin:0 auto;width:100%}
+.pg{padding:1.5rem 1.25rem;max-width:1080px;margin:0 auto;width:100%;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* PAGE HEADER */
+.ph{margin-bottom:1.25rem}
+.ph-title{font-size:20px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;gap:9px}
+.ph-sub{font-size:13px;color:var(--tx2);margin-top:2px}
 
 /* CARDS */
-.card{background:var(--surf);border:0.5px solid var(--bd);border-radius:var(--rl);padding:1.25rem}
-.card-sm{padding:.9rem}
-.ctitle{font-size:14px;font-weight:600;margin-bottom:1rem}
+.card{background:var(--surf);border:0.5px solid var(--bd);border-radius:var(--rl);padding:1.25rem;box-shadow:var(--sh1)}
+.card-sm{padding:1rem;transition:box-shadow .18s,transform .18s,border-color .18s}
+.card-int{cursor:pointer}
+.card-int:hover{box-shadow:var(--sh2);border-color:var(--bd2)}
+.ctitle{font-size:14px;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:7px}
 
 /* GRID */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -53,55 +69,76 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
 
 /* STAT */
-.stat{background:var(--surf2);border-radius:var(--r);padding:.875rem 1rem}
-.stat-lbl{font-size:10px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.stat-n{font-size:26px;font-weight:700;line-height:1}
-.stat-sub{font-size:11px;color:var(--tx3);margin-top:3px}
+.stat{background:var(--surf2);border-radius:var(--r);padding:1rem 1.1rem;position:relative;overflow:hidden}
+.stat-lbl{font-size:10px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.stat-n{font-size:28px;font-weight:700;line-height:1;letter-spacing:-.5px}
+.stat-sub{font-size:11px;color:var(--tx3);margin-top:5px}
 
 /* BADGE */
-.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap;line-height:1.3}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.badge.nodot::before{display:none}
 .b-blue{background:var(--blue-bg);color:var(--blue-tx)}
 .b-green{background:var(--green-bg);color:var(--green-tx)}
 .b-amber{background:var(--amber-bg);color:var(--amber-tx)}
 .b-red{background:var(--red-bg);color:var(--red-tx)}
 .b-purple{background:var(--purple-bg);color:var(--purple-tx)}
 .b-teal{background:var(--teal-bg);color:var(--teal-tx)}
-.b-gray{background:var(--surf2);color:var(--tx2)}
+.b-gray{background:var(--surf3);color:var(--tx2)}
 
 /* BUTTONS */
-.btn{font-family:var(--font);font-size:13px;font-weight:500;padding:7px 16px;border-radius:var(--r);border:.5px solid var(--bd2);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;background:transparent;color:var(--tx2)}
-.btn:hover{background:var(--surf2)}.btn:active{transform:scale(.98)}
-.btn-p{background:#0f1a2e;color:#fff;border-color:#0f1a2e}.btn-p:hover{background:#1a2d4a;color:#fff}
-.btn-green{background:var(--green-bg);color:var(--green-tx);border-color:rgba(59,109,17,.3)}.btn-green:hover{background:#c0dd97}
-.btn-red{background:var(--red-bg);color:var(--red-tx);border-color:rgba(163,45,45,.3)}
-.btn-sm{font-size:11px;padding:4px 10px;border-radius:6px}
+.btn{font-family:var(--font);font-size:13px;font-weight:500;padding:8px 17px;border-radius:var(--r);border:.5px solid var(--bd2);cursor:pointer;transition:all .16s;display:inline-flex;align-items:center;gap:6px;background:var(--surf);color:var(--tx2)}
+.btn:hover{background:var(--surf2);border-color:var(--bd2)}
+.btn:active{transform:scale(.97)}
+.btn-p{background:var(--navy);color:#fff;border-color:var(--navy)}.btn-p:hover{background:#1b3454;color:#fff}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-accent:hover{background:#0c5a46;color:#fff}
+.btn-green{background:var(--green-bg);color:var(--green-tx);border-color:rgba(59,109,17,.28)}.btn-green:hover{background:#c0dd97}
+.btn-red{background:var(--red-bg);color:var(--red-tx);border-color:rgba(163,45,45,.28)}.btn-red:hover{background:#f7c1c1}
+.btn-sm{font-size:11.5px;padding:5px 11px;border-radius:7px}
+.btn-block{width:100%;justify-content:center}
 
 /* FORM */
-label{font-size:12px;font-weight:500;color:var(--tx2);display:block;margin-bottom:3px}
-input,select,textarea{width:100%;font-family:var(--font);font-size:13px;color:var(--tx);background:var(--surf);border:.5px solid var(--bd2);border-radius:var(--r);padding:7px 11px;outline:none;transition:border .15s}
-input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(24,95,165,.1)}
-textarea{resize:vertical;min-height:72px}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-bottom:.875rem}
-.ff{margin-bottom:.875rem}
+label{font-size:12px;font-weight:500;color:var(--tx2);display:block;margin-bottom:4px}
+label .req{color:var(--red);margin-left:2px}
+input,select,textarea{width:100%;font-family:var(--font);font-size:13px;color:var(--tx);background:var(--surf);border:.5px solid var(--bd2);border-radius:var(--r);padding:9px 12px;outline:none;transition:border .16s,box-shadow .16s}
+input::placeholder,textarea::placeholder{color:var(--tx3)}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,110,86,.12)}
+input.err,select.err,textarea.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(163,45,45,.1)}
+.fld-err{font-size:11px;color:var(--red);margin-top:3px;display:none}
+.fld-err.show{display:block}
+textarea{resize:vertical;min-height:76px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem}
+.ff{margin-bottom:.9rem}
+.fsec{font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin:1.25rem 0 .625rem;display:flex;align-items:center;gap:8px}
+.fsec::after{content:'';flex:1;height:1px;background:var(--bd)}
+.fsec:first-child{margin-top:0}
 
 /* CHECKBOX MULTI-SELECT */
-.checkbox-group{display:flex;flex-direction:column;gap:6px;margin-top:4px}
-.cb-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border:.5px solid var(--bd2);border-radius:var(--r);cursor:pointer;transition:all .15s}
-.cb-item:hover{background:var(--surf2)}
-.cb-item.selected{border-color:var(--blue);background:var(--blue-bg)}
-.cb-item input[type=checkbox]{width:auto;margin:0}
+.checkbox-group{display:flex;flex-direction:column;gap:7px;margin-top:5px}
+.cb-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:.5px solid var(--bd2);border-radius:var(--r);cursor:pointer;transition:all .16s}
+.cb-item:hover{background:var(--surf2);border-color:var(--bd2)}
+.cb-item.selected{border-color:var(--accent);background:var(--accent-soft)}
+.cb-item input[type=checkbox]{width:auto;margin:0;accent-color:var(--accent)}
 .cb-label{font-size:13px;flex:1}
 .cb-sub{font-size:11px;color:var(--tx3)}
 
 /* TABLE */
 .tbl{width:100%;border-collapse:collapse}
-.tbl th{text-align:left;font-size:11px;font-weight:600;color:var(--tx3);padding:7px 10px;border-bottom:.5px solid var(--bd);text-transform:uppercase;letter-spacing:.3px}
-.tbl td{padding:9px 10px;border-bottom:.5px solid var(--bd);font-size:13px;vertical-align:middle}
+.tbl th{text-align:left;font-size:11px;font-weight:600;color:var(--tx3);padding:8px 10px;border-bottom:.5px solid var(--bd);text-transform:uppercase;letter-spacing:.3px}
+.tbl td{padding:10px;border-bottom:.5px solid var(--bd);font-size:13px;vertical-align:middle}
 .tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:var(--surf2)}
+
+/* ROW CARD (list items) */
+.rowc{background:var(--surf);border:.5px solid var(--bd);border-left:3px solid var(--bd2);border-radius:var(--r);padding:.9rem 1rem;box-shadow:var(--sh1);transition:box-shadow .18s,transform .18s;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.6rem}
+.rowc:hover{box-shadow:var(--sh2)}
+.rowc.pe-high{border-left-color:#e24b4a}
+.rowc.pe-med{border-left-color:#ef9f27}
+.rowc.pe-low{border-left-color:#9fbf6a}
+.rowc.pe-over{border-left-color:#e24b4a}
 
 /* NOTICE */
-.notice{border-radius:var(--r);padding:.875rem 1rem;font-size:13px;line-height:1.6}
+.notice{border-radius:var(--r);padding:.9rem 1.05rem;font-size:13px;line-height:1.6;display:flex;gap:9px;align-items:flex-start}
+.notice .ni{flex-shrink:0;margin-top:1px}
 .n-warn{background:var(--amber-bg);color:var(--amber-tx);border-left:3px solid #ef9f27}
 .n-info{background:var(--blue-bg);color:var(--blue-tx);border-left:3px solid var(--blue)}
 .n-red{background:var(--red-bg);color:var(--red-tx);border-left:3px solid #e24b4a}
@@ -109,64 +146,102 @@ textarea{resize:vertical;min-height:72px}
 .n-purple{background:var(--purple-bg);color:var(--purple-tx);border-left:3px solid var(--purple)}
 
 /* BAR */
-.bar-wrap{display:flex;flex-direction:column;gap:8px}
-.bar-row{display:grid;grid-template-columns:100px 1fr 44px;gap:8px;align-items:center}
+.bar-wrap{display:flex;flex-direction:column;gap:9px}
+.bar-row{display:grid;grid-template-columns:104px 1fr 46px;gap:9px;align-items:center}
 .bar-lbl{font-size:12px;color:var(--tx2);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar-track{background:var(--surf2);border-radius:4px;height:8px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.bar-track{background:var(--surf3);border-radius:5px;height:9px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;transition:width .7s cubic-bezier(.4,0,.2,1)}
 .bar-val{font-size:12px;font-weight:600;font-family:var(--mono)}
 
 /* HOTSPOT */
 .hs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
-.hs-card{border-radius:var(--r);padding:1rem;text-align:center;border:.5px solid var(--bd);background:var(--surf)}
-.hs-icon{font-size:22px;margin-bottom:5px}
-.hs-name{font-size:11px;font-weight:600;margin-bottom:3px}
-.hs-count{font-size:22px;font-weight:700;line-height:1}
-.hs-bar{height:4px;border-radius:2px;margin:5px 0 3px}
+.hs-card{border-radius:var(--r);padding:1rem .75rem;text-align:center;border:.5px solid var(--bd);background:var(--surf);box-shadow:var(--sh1)}
+.hs-icon{font-size:23px;margin-bottom:6px}
+.hs-name{font-size:11px;font-weight:600;margin-bottom:4px;color:var(--tx2)}
+.hs-count{font-size:24px;font-weight:700;line-height:1;letter-spacing:-.5px}
+.hs-bar{height:4px;border-radius:2px;margin:7px 0 4px}
 
 /* TECH CARD */
-.tech-card{display:flex;align-items:center;gap:12px;padding:.875rem;border:.5px solid var(--bd);border-radius:var(--r);background:var(--surf);margin-bottom:.5rem}
-.tech-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
-.tech-info{flex:1}
+.tech-card{display:flex;align-items:center;gap:13px;padding:.95rem;border:.5px solid var(--bd);border-radius:var(--r);background:var(--surf);margin-bottom:.6rem;box-shadow:var(--sh1)}
+.tech-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.tech-info{flex:1;min-width:0}
 .tech-name{font-size:13px;font-weight:600}
-.wl-track{background:var(--surf2);border-radius:3px;height:5px;margin-top:7px}
-.wl-fill{height:100%;border-radius:3px;transition:width .5s}
+.wl-track{background:var(--surf3);border-radius:3px;height:6px;margin-top:8px}
+.wl-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* STATUS PIPELINE STEPPER */
+.pipe{display:flex;align-items:center;gap:0;margin:2px 0 4px;overflow-x:auto;padding-bottom:2px}
+.pipe-step{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:52px;position:relative}
+.pipe-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;z-index:1;background:var(--surf3);color:var(--tx3);border:2px solid var(--surf3)}
+.pipe-dot.done{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pipe-dot.now{background:#fff;color:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.pipe-lbl{font-size:9px;color:var(--tx3);text-align:center;line-height:1.2;max-width:56px}
+.pipe-lbl.act{color:var(--tx);font-weight:500}
+.pipe-line{position:absolute;top:11px;left:50%;width:100%;height:2px;background:var(--surf3);z-index:0}
+.pipe-line.done{background:var(--accent)}
+
+/* TIMELINE */
+.tl-item{display:flex;gap:11px}
+.tl-rail{display:flex;flex-direction:column;align-items:center}
+.tl-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);margin-top:4px;flex-shrink:0}
+.tl-ln{width:1.5px;background:var(--bd);flex:1;min-height:22px}
 
 /* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
-.modal{background:var(--surf);border-radius:var(--rl);padding:1.5rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto}
-.modal-title{font-size:15px;font-weight:700;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center}
-.mc{background:none;border:none;font-size:20px;cursor:pointer;color:var(--tx3);line-height:1}
+.modal-bg{position:fixed;inset:0;background:rgba(18,20,24,.5);backdrop-filter:blur(3px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surf);border-radius:var(--rl);padding:1.5rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--sh3);animation:modalUp .22s cubic-bezier(.2,.8,.3,1)}
+@keyframes modalUp{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;letter-spacing:-.2px}
+.mc{background:var(--surf2);border:none;font-size:15px;cursor:pointer;color:var(--tx2);line-height:1;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.mc:hover{background:var(--surf3);color:var(--tx)}
 
 /* MISC */
 .divider{border:none;border-top:.5px solid var(--bd);margin:1rem 0}
-.mono{font-family:var(--mono);font-size:12px}
-.empty{text-align:center;padding:2.5rem;color:var(--tx3);font-size:13px}
-.pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.875rem}
-.pill{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;border:.5px solid var(--bd2);cursor:pointer;background:transparent;color:var(--tx2);font-family:var(--font);transition:all .15s}
-.pill.on{background:#0f1a2e;color:#fff;border-color:#0f1a2e}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:-.3px}
+.empty{text-align:center;padding:3rem 1.5rem;color:var(--tx3)}
+.empty-ic{font-size:40px;margin-bottom:12px;opacity:.85}
+.empty-ttl{font-size:14px;font-weight:600;color:var(--tx2);margin-bottom:5px}
+.empty-sub{font-size:12.5px;color:var(--tx3);max-width:300px;margin:0 auto 14px;line-height:1.6}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.9rem}
+.pill{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:500;border:.5px solid var(--bd2);cursor:pointer;background:var(--surf);color:var(--tx2);font-family:var(--font);transition:all .16s}
+.pill:hover{border-color:var(--bd2);background:var(--surf2)}
+.pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* SKELETON */
+.skel{background:linear-gradient(90deg,var(--surf2) 25%,var(--surf3) 37%,var(--surf2) 63%);background-size:400% 100%;animation:shimmer 1.3s ease infinite;border-radius:var(--r)}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.skel-row{height:78px;margin-bottom:.5rem}
 
 /* LOADER */
-.loader-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
-.spinner{width:36px;height:36px;border:3px solid var(--surf3);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+.loader-overlay{position:fixed;inset:0;background:rgba(244,242,236,.82);backdrop-filter:blur(2px);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.spinner{width:38px;height:38px;border:3px solid var(--surf3);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:24px;right:24px;background:#0f1a2e;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;z-index:600;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none}
-.toast.show{opacity:1;transform:none}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--navy);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;font-weight:500;z-index:600;opacity:0;transition:all .28s cubic-bezier(.2,.8,.3,1);pointer-events:none;box-shadow:var(--sh3);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ASSIGN AVATARS */
 .assignees-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
-.av-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;font-size:12px;font-weight:500}
+.av-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:500}
 
 /* CONFIG BOX */
 .config-box{background:var(--surf3);border-radius:var(--r);padding:1rem;font-size:12px;font-family:var(--mono);color:var(--tx2);line-height:1.7}
 .config-box input{font-family:var(--mono);font-size:12px;margin-top:4px}
 
+/* SEARCH BAR */
+.searchbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.searchbar .grow{flex:1;min-width:180px}
+
 @media(max-width:640px){
   .g2,.g3,.g4,.hs-grid,.frow{grid-template-columns:1fr}
-  .bar-row{grid-template-columns:80px 1fr 36px}
+  .bar-row{grid-template-columns:76px 1fr 38px}
   .nav-logo small{display:none}
+  .nav{padding:0 .75rem;gap:2px}
+  .ntab{padding:7px 10px;font-size:12px}
+  .pg{padding:1.1rem .9rem}
+  .modal{padding:1.25rem}
 }
 </style>
+
 </head>
 <body>
 
@@ -207,7 +282,12 @@ textarea{resize:vertical;min-height:72px}
     <div class="modal-title">เข้าสู่ระบบ <button class="mc" onclick="cm('loginMd')">✕</button></div>
     <div class="ff"><label>ชื่อผู้ใช้</label><input id="lu" placeholder="username" autocomplete="username"></div>
     <div class="ff"><label>รหัสผ่าน</label><input id="lp" type="password" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doIn()"></div>
-
+    <div style="background:var(--surf2);border-radius:var(--r);padding:10px 12px;font-size:12px;color:var(--tx2);margin-bottom:.875rem;line-height:1.7">
+      <b>บัญชีระบบ:</b><br>
+      admin / admin1234 — วิศวกร<br>
+      tech1 / tech1234 — นายธนกร ไกรดิษฐ์<br>
+      tech2 / tech2234 — นายเอกรัตน์ อุปถัมภ์
+    </div>
     <div id="lerr" style="color:var(--red-tx);font-size:12px;margin-bottom:.5rem;display:none"></div>
     <button class="btn btn-p" style="width:100%" onclick="doIn()">เข้าสู่ระบบ</button>
   </div>
@@ -220,7 +300,9 @@ textarea{resize:vertical;min-height:72px}
 // ═══════════════════════════════════════════
 // CONFIG — แก้ GAS_URL หลัง Deploy Apps Script
 // ═══════════════════════════════════════════
-let GAS_URL = localStorage.getItem('gas_url') || '';
+// URL ของ Google Apps Script ฝังไว้ในโปรแกรม (แก้ได้ที่หน้า ⚙ ตั้งค่า)
+const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbz8CIooYTAdS7A7gK1a_-0fkbsYLhUVVq6AcfGcNfQ9N0Rj9q6PoVeygxnMyQWlXmkf0Q/exec';
+let GAS_URL = localStorage.getItem('gas_url') || DEFAULT_GAS_URL;
 
 const USERS = {
   admin: { pass:'admin1234', name:'นายปณิธาน แก้วเจริญ', role:'admin', color:'#7ecbb4', initials:'ปณ' },
@@ -406,33 +488,38 @@ function pgReport() {
       <b>เงื่อนไข SLA:</b> ระยะเวลาดำเนินการเริ่มนับหลังวิศวกร<b>อนุมัติ</b>เท่านั้น ไม่ใช่วันที่แจ้ง
     </div>
     <div class="card">
-      <div class="ctitle">📋 แบบฟอร์มแจ้งซ่อม</div>
+      <div class="ctitle"><i class="ti ti-clipboard-plus" style="color:var(--accent)"></i> แบบฟอร์มแจ้งซ่อม</div>
+      <div class="fsec">ข้อมูลผู้แจ้ง</div>
       <div class="frow">
-        <div class="ff" style="margin:0"><label>ชื่อ-นามสกุล *</label><input id="fN" placeholder="ชื่อ นามสกุล"></div>
-        <div class="ff" style="margin:0"><label>โทรศัพท์ *</label><input id="fP" type="tel" placeholder="08x-xxx-xxxx"></div>
+        <div class="ff" style="margin:0"><label>ชื่อ-นามสกุล<span class="req">*</span></label><input id="fN" placeholder="ชื่อ นามสกุล" oninput="clrErr('fN')"><div class="fld-err" id="e_fN">กรุณากรอกชื่อ</div></div>
+        <div class="ff" style="margin:0"><label>โทรศัพท์<span class="req">*</span></label><input id="fP" type="tel" placeholder="08x-xxx-xxxx" oninput="clrErr('fP')"><div class="fld-err" id="e_fP">กรุณากรอกเบอร์โทร</div></div>
       </div>
       <div class="frow" style="margin-top:.75rem">
-        <div class="ff" style="margin:0"><label>ตำแหน่ง/หน่วยงาน *</label><input id="fD" placeholder="อาจารย์ / เจ้าหน้าที่ / นักศึกษา"></div>
+        <div class="ff" style="margin:0"><label>ตำแหน่ง/หน่วยงาน<span class="req">*</span></label><input id="fD" placeholder="อาจารย์ / เจ้าหน้าที่ / นักศึกษา" oninput="clrErr('fD')"><div class="fld-err" id="e_fD">กรุณากรอกหน่วยงาน</div></div>
         <div class="ff" style="margin:0"><label>อีเมล</label><input id="fE" type="email" placeholder="@psu.ac.th"></div>
       </div>
-      <div class="frow" style="margin-top:.75rem">
-        <div class="ff" style="margin:0"><label>อาคาร *</label>
-          <select id="fB"><option value="">-- เลือกอาคาร --</option>${BUILDINGS.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select>
+      <div class="fsec">สถานที่</div>
+      <div class="frow">
+        <div class="ff" style="margin:0"><label>อาคาร<span class="req">*</span></label>
+          <select id="fB" onchange="clrErr('fB')"><option value="">-- เลือกอาคาร --</option>${BUILDINGS.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select>
+          <div class="fld-err" id="e_fB">กรุณาเลือกอาคาร</div>
         </div>
-        <div class="ff" style="margin:0"><label>ห้อง / ชั้น *</label><input id="fR" placeholder="เช่น ห้อง 201 ชั้น 2"></div>
+        <div class="ff" style="margin:0"><label>ห้อง / ชั้น<span class="req">*</span></label><input id="fR" placeholder="เช่น ห้อง 201 ชั้น 2" oninput="clrErr('fR')"><div class="fld-err" id="e_fR">กรุณาระบุห้อง</div></div>
       </div>
-      <div class="frow" style="margin-top:.75rem">
-        <div class="ff" style="margin:0"><label>ประเภทงาน *</label>
-          <select id="fC"><option value="">-- เลือกประเภท --</option>${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+      <div class="fsec">รายละเอียดงาน</div>
+      <div class="frow">
+        <div class="ff" style="margin:0"><label>ประเภทงาน<span class="req">*</span></label>
+          <select id="fC" onchange="clrErr('fC')"><option value="">-- เลือกประเภท --</option>${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+          <div class="fld-err" id="e_fC">กรุณาเลือกประเภท</div>
         </div>
-        <div class="ff" style="margin:0"><label>ความเร่งด่วน *</label>
-          <select id="fPr"><option value="low">ปกติ</option><option value="med">ปานกลาง</option><option value="high">เร่งด่วน/ความปลอดภัย</option></select>
+        <div class="ff" style="margin:0"><label>ความเร่งด่วน<span class="req">*</span></label>
+          <select id="fPr"><option value="low">ปกติ — ไม่เร่งด่วน</option><option value="med">ปานกลาง — กระทบการทำงาน</option><option value="high">เร่งด่วน — กระทบความปลอดภัย</option></select>
         </div>
       </div>
       <div class="ff" style="margin-top:.25rem"><label>ค่าใช้จ่ายประมาณการ (บาท)</label><input id="fCost" type="number" placeholder="0" min="0"></div>
-      <div class="ff"><label>รายละเอียดปัญหา *</label><textarea id="fDesc" placeholder="อธิบายปัญหาให้ละเอียด เพื่อให้วิศวกรอนุมัติได้รวดเร็ว"></textarea></div>
+      <div class="ff"><label>รายละเอียดปัญหา<span class="req">*</span></label><textarea id="fDesc" placeholder="อธิบายปัญหาให้ละเอียด เช่น ไฟดับ ท่อรั่ว แอร์ไม่เย็น เพื่อให้วิศวกรอนุมัติได้รวดเร็ว" oninput="clrErr('fDesc')"></textarea><div class="fld-err" id="e_fDesc">กรุณากรอกรายละเอียด</div></div>
       <div id="rmsg" style="margin-bottom:.75rem"></div>
-      <button class="btn btn-p" onclick="submitR()">ส่งแจ้งซ่อม →</button>
+      <button class="btn btn-accent btn-block" onclick="submitR()"><i class="ti ti-send"></i> ส่งแจ้งซ่อม</button>
     </div>
   </div>`;
 }
@@ -440,7 +527,14 @@ function pgReport() {
 async function submitR() {
   const n=v('fN'),ph=v('fP'),d=v('fD'),b=v('fB'),r=v('fR'),c=v('fC'),desc=v('fDesc');
   const msg=document.getElementById('rmsg');
-  if (!n||!ph||!d||!b||!r||!c||!desc) { msg.innerHTML='<div class="notice n-red" style="margin:0">กรุณากรอกข้อมูลที่จำเป็นให้ครบ (*)</div>'; return; }
+  const checks=[['fN',n],['fP',ph],['fD',d],['fB',b],['fR',r],['fC',c],['fDesc',desc]];
+  let firstBad=null;
+  checks.forEach(([id,val])=>{
+    const el=document.getElementById(id), er=document.getElementById('e_'+id);
+    if(!val){ el.classList.add('err'); if(er)er.classList.add('show'); if(!firstBad)firstBad=el; }
+    else { el.classList.remove('err'); if(er)er.classList.remove('show'); }
+  });
+  if(firstBad){ msg.innerHTML='<div class="notice n-red" style="margin:0"><i class="ti ti-alert-circle ni"></i><div>ยังกรอกข้อมูลไม่ครบ กรุณาตรวจช่องที่ทำเครื่องหมายสีแดง</div></div>'; firstBad.focus(); firstBad.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   const ticket = {
     id:genId(), createdAt:now(), name:n, phone:ph, dept:d,
     email:v('fE'), building:b, room:r, category:c,
@@ -453,12 +547,13 @@ async function submitR() {
   showLoader('กำลังบันทึก...');
   await syncAdd(ticket);
   hideLoader(); updApvCnt();
-  msg.innerHTML=`<div class="notice n-green" style="margin:0"><b>✅ ส่งแจ้งซ่อมสำเร็จ!</b><br>รหัส: <span class="mono">${ticket.id}</span><br>สถานะ: รอวิศวกรตรวจสอบและอนุมัติ</div>`;
+  msg.innerHTML=`<div class="notice n-green" style="margin:0"><i class="ti ti-circle-check ni"></i><div><b>ส่งแจ้งซ่อมสำเร็จ</b><br>รหัสใบแจ้งซ่อม: <span class="mono">${ticket.id}</span> — จดรหัสนี้ไว้ติดตามสถานะ<br>สถานะ: รอวิศวกรตรวจสอบและอนุมัติ</div></div>`;
   ['fN','fP','fD','fE','fR','fDesc','fCost'].forEach(f=>{const el=document.getElementById(f);if(el)el.value='';});
   document.getElementById('fB').value=''; document.getElementById('fC').value='';
-  showToast('✅ บันทึกลง Google Sheet แล้ว');
+  showToast('บันทึกลง Google Sheet แล้ว');
 }
 function v(id) { const el=document.getElementById(id); return el?el.value.trim():''; }
+function clrErr(id){ const el=document.getElementById(id),er=document.getElementById('e_'+id); if(el)el.classList.remove('err'); if(er)er.classList.remove('show'); }
 
 // ════════════════════════ PAGE: STATUS ════════════════════════
 function pgStatus() {
@@ -480,27 +575,26 @@ function pgStatus() {
   </div>`;
 }
 function renderStatusList(tickets) {
-  if (!tickets.length) return `<div class="empty">ไม่พบรายการ</div>`;
+  if (!tickets.length) return `<div class="empty"><div class="empty-ic"><i class="ti ti-clipboard-search"></i></div><div class="empty-ttl">ยังไม่มีรายการแจ้งซ่อม</div><div class="empty-sub">เมื่อมีการแจ้งซ่อมเข้ามา รายการจะแสดงที่นี่ พร้อมสถานะและผู้รับผิดชอบ</div></div>`;
   return `<div style="display:flex;flex-direction:column;gap:.5rem">${tickets.map(t=>{
     const s=getSI(t.status),b=getBI(t.building);
     const pCls=t.priority==='high'?'b-red':t.priority==='med'?'b-amber':'b-gray';
     const pLbl={high:'เร่งด่วน',med:'ปานกลาง',low:'ปกติ'}[t.priority];
     const el=elapsed(t.createdAt),sla=getSLA(t.category),over=el>sla&&!['done','cannot'].includes(t.status);
-    return `<div class="card card-sm" style="${over?'border-left:3px solid #e24b4a':''}">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
-        <div style="flex:1">
-          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px">
+    const peCls=over?'pe-over':t.priority==='high'?'pe-high':t.priority==='med'?'pe-med':'pe-low';
+    return `<div class="rowc ${peCls}">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;align-items:center">
             <span class="mono">${t.id}</span>
             <span class="badge ${s.cls}">${s.label}</span>
-            <span class="badge ${pCls}">${pLbl}</span>
-            ${over?'<span class="badge b-red">⚠ เกิน SLA</span>':''}
+            <span class="badge ${pCls} nodot">${pLbl}</span>
+            ${over?'<span class="badge b-red">เกิน SLA</span>':''}
           </div>
-          <div style="font-weight:600;font-size:13px;margin-bottom:2px">${b.icon} ${b.name} — ${t.room}</div>
-          <div style="font-size:12px;color:var(--tx2)">${t.category} | ${t.name} | ${fd(t.createdAt)}</div>
-          <div style="font-size:12px;margin-top:4px">${assigneeChips(t.assignees)}</div>
+          <div style="font-weight:600;font-size:13.5px;margin-bottom:2px">${b.icon} ${b.name} — ${t.room}</div>
+          <div style="font-size:12px;color:var(--tx2)">${t.category} · ${t.name} · ${fd(t.createdAt)}</div>
+          <div style="font-size:12px;margin-top:5px">${assigneeChips(t.assignees)}</div>
         </div>
-        <button class="btn btn-sm" onclick="openDet('${t.id}')">รายละเอียด</button>
-      </div>
+        <button class="btn btn-sm" onclick="openDet('${t.id}')"><i class="ti ti-eye"></i> รายละเอียด</button>
     </div>`;
   }).join('')}</div>`;
 }
@@ -553,7 +647,7 @@ function pgApprove() {
       <div style="font-size:12px;color:var(--tx3)">${pending.length} รายการ</div></div>
       <button class="btn btn-sm" onclick="loadAll().then(rp)">🔄 รีเฟรช</button>
     </div>
-    ${!pending.length?`<div class="notice n-green">✓ ไม่มีงานรออนุมัติในขณะนี้</div>`:''}
+    ${!pending.length?`<div class="empty" style="padding:2rem"><div class="empty-ic" style="color:var(--green)"><i class="ti ti-circle-check"></i></div><div class="empty-ttl">เคลียร์คิวหมดแล้ว</div><div class="empty-sub">ไม่มีใบแจ้งซ่อมรออนุมัติในขณะนี้</div></div>`:''}
     <div style="display:flex;flex-direction:column;gap:.75rem">
     ${pending.map(t=>{
       const b=getBI(t.building),pCls=t.priority==='high'?'b-red':t.priority==='med'?'b-amber':'b-gray';
@@ -635,7 +729,7 @@ async function confirmAssign(id) {
   showLoader('กำลังบันทึก...');
   await syncUpdate(id,{status:'assigned',assignees:selected,approvedAt:t.approvedAt,approvedBy:t.approvedBy,approvedBudget:budget},entry);
   hideLoader(); cm('assignMd'); updApvCnt(); rp();
-  showToast(`✅ มอบหมายงานให้ ${selected.map(u=>getUserName(u).split(' ')[0]).join(' + ')} แล้ว`);
+  showToast(`มอบหมายงานให้ ${selected.map(u=>getUserName(u).split(' ')[0]).join(' + ')} แล้ว`);
 }
 
 async function doReject(id) {
@@ -666,7 +760,7 @@ function pgManage() {
       <button class="btn btn-sm" onclick="loadAll().then(rp)">🔄 รีเฟรช</button>
     </div>
     <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem">
-    ${!active.length?`<div class="empty" style="padding:1.5rem">ไม่มีงานที่กำลังดำเนินการ</div>`:''}
+    ${!active.length?`<div class="empty" style="padding:2rem"><div class="empty-ic"><i class="ti ti-checklist"></i></div><div class="empty-ttl">ไม่มีงานที่กำลังดำเนินการ</div><div class="empty-sub">งานที่ได้รับอนุมัติและมอบหมายแล้วจะแสดงที่นี่</div></div>`:''}
     ${active.map(t=>{
       const s=getSI(t.status),b=getBI(t.building),el=elapsed(t.createdAt),sla=getSLA(t.category),over=el>sla;
       return `<div class="card card-sm" style="${over?'border-left:3px solid #e24b4a':''}">
@@ -737,7 +831,7 @@ async function saveStatusUpdate(id) {
   showLoader('กำลังบันทึก...');
   await syncUpdate(id,{status:ns,actualCost:cost,...(ns==='done'?{completedAt:t.completedAt}:{})},entry);
   hideLoader(); cm('statusMd'); rp();
-  showToast('✅ อัปเดตสถานะแล้ว');
+  showToast('อัปเดตสถานะแล้ว');
 }
 
 // ════════════════════════ PAGE: DASHBOARD ════════════════════════
@@ -880,7 +974,7 @@ function saveGasUrl() {
   GAS_URL=document.getElementById('gasUrl').value.trim();
   localStorage.setItem('gas_url',GAS_URL);
   document.getElementById('cfgMsg').innerHTML='<div class="notice n-green" style="margin:0">✅ บันทึก URL แล้ว</div>';
-  showToast('✅ บันทึก URL แล้ว');
+  showToast('บันทึก URL แล้ว');
 }
 
 async function initSheet() {
@@ -891,7 +985,7 @@ async function initSheet() {
     await api('init');
     hideLoader();
     document.getElementById('cfgMsg').innerHTML='<div class="notice n-green" style="margin:0">✅ สร้าง Sheet สำเร็จ! พร้อมใช้งานแล้ว</div>';
-    showToast('✅ สร้าง Sheet สำเร็จ!');
+    showToast('สร้าง Sheet สำเร็จ');
     await loadAll();
   } catch(e) {
     hideLoader();
@@ -906,7 +1000,7 @@ async function testConnection() {
     await api('getAll');
     hideLoader();
     document.getElementById('cfgMsg').innerHTML='<div class="notice n-green" style="margin:0">✅ เชื่อมต่อสำเร็จ! Google Sheet พร้อมใช้งาน</div>';
-    showToast('✅ เชื่อมต่อสำเร็จ');
+    showToast('เชื่อมต่อสำเร็จ');
   } catch(e) {
     hideLoader();
     document.getElementById('cfgMsg').innerHTML=`<div class="notice n-red" style="margin:0">❌ เชื่อมต่อไม่ได้: ${e.message}</div>`;
@@ -914,16 +1008,32 @@ async function testConnection() {
 }
 
 // ════════════════════════ DETAIL MODAL ════════════════════════
+function statusPipe(cur){
+  if(cur==='cannot') return '<div class="notice n-red" style="margin-bottom:1rem"><i class="ti ti-ban ni"></i><div>งานนี้ไม่สามารถดำเนินการได้</div></div>';
+  const flow=['pending_approval','assigned','survey','purchase','working','done'];
+  const short={pending_approval:'รออนุมัติ',assigned:'มอบหมาย',survey:'สำรวจ',purchase:'จัดซื้อ',working:'ซ่อม',done:'เสร็จ'};
+  const ci=flow.indexOf(cur);
+  return `<div class="pipe">${flow.map((st,i)=>{
+    const cls=i<ci?'done':i===ci?'now':'';
+    const lineCls=i<ci?'done':'';
+    return `<div class="pipe-step">
+      ${i>0?`<div class="pipe-line ${i<=ci?'done':''}"></div>`:''}
+      <div class="pipe-dot ${cls}">${i<ci?'<i class="ti ti-check" style="font-size:11px"></i>':i+1}</div>
+      <div class="pipe-lbl ${i===ci?'act':''}">${short[st]}</div>
+    </div>`;
+  }).join('')}</div><div style="height:1px;background:var(--bd);margin:0 0 1rem"></div>`;
+}
 function openDet(id) {
   const t=DB.tickets.find(t=>t.id===id);if(!t)return;
   const s=getSI(t.status),b=getBI(t.building),pLbl={high:'เร่งด่วน',med:'ปานกลาง',low:'ปกติ'}[t.priority];
   const pCls=t.priority==='high'?'b-red':t.priority==='med'?'b-amber':'b-gray';
   document.getElementById('detContent').innerHTML=`
-    <div class="modal-title">${t.id} <button class="mc" onclick="cm('detMd')">✕</button></div>
+    <div class="modal-title"><span class="mono">${t.id}</span> <button class="mc" onclick="cm('detMd')"><i class="ti ti-x"></i></button></div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem">
       <span class="badge ${s.cls}">${s.label}</span>
       <span class="badge ${pCls}">${pLbl}</span>
     </div>
+    ${statusPipe(t.status)}
     <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:1rem">
     ${[['อาคาร',b.icon+' '+b.name],['ห้อง',t.room],['ประเภท',t.category],['ผู้แจ้ง',t.name],
        ['โทร',t.phone],['หน่วยงาน',t.dept],['วันที่แจ้ง',fd(t.createdAt)],
@@ -935,15 +1045,15 @@ function openDet(id) {
     <div style="font-size:12px;color:var(--tx3);margin-bottom:4px">รายละเอียด</div>
     <div style="font-size:13px;background:var(--surf2);border-radius:8px;padding:.75rem;margin-bottom:1rem;line-height:1.6">${t.desc}</div>
     <div style="font-size:12px;font-weight:600;color:var(--tx3);margin-bottom:8px">ประวัติดำเนินงาน</div>
-    ${(t.history||[]).map((h,i,arr)=>{const si=getSI(h.status);return `<div style="display:flex;gap:10px">
-      <div style="display:flex;flex-direction:column;align-items:center">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--blue);margin-top:4px;flex-shrink:0"></div>
-        ${i<arr.length-1?`<div style="width:1px;background:var(--bd);flex:1;min-height:20px"></div>`:''}
+    ${(t.history||[]).map((h,i,arr)=>{const si=getSI(h.status);return `<div class="tl-item">
+      <div class="tl-rail">
+        <div class="tl-dot"></div>
+        ${i<arr.length-1?`<div class="tl-ln"></div>`:''}
       </div>
       <div style="padding-bottom:12px;flex:1">
         <span class="badge ${si.cls}" style="font-size:10px">${si.label}</span>
-        ${h.note&&h.note!=='-'?`<div style="font-size:12px;color:var(--tx2);margin-top:2px">${h.note}</div>`:''}
-        <div style="font-size:11px;color:var(--tx3)">${fd(h.date)} — ${h.by}</div>
+        ${h.note&&h.note!=='-'?`<div style="font-size:12px;color:var(--tx2);margin-top:3px">${h.note}</div>`:''}
+        <div style="font-size:11px;color:var(--tx3);margin-top:2px">${fd(h.date)} — ${h.by}</div>
       </div>
     </div>`;}).join('')}`;
   document.getElementById('detMd').style.display='flex';

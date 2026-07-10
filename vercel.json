@@ -3,13 +3,10 @@
   "builds": [{ "src": "index.html", "use": "@vercel/static" }],
   "routes": [{ "src": "/(.*)", "dest": "/index.html" }],
   "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Cache-Control", "value": "no-cache" }
-      ]
-    }
+    { "source": "/(.*)", "headers": [
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+      { "key": "Cache-Control", "value": "no-cache" }
+    ]}
   ]
 }
