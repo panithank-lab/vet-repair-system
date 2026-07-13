@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.31.0/tabler-icons.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -39,7 +40,24 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px
 .ntab{padding:7px 13px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,0.58);cursor:pointer;border-radius:8px;border:none;background:transparent;font-family:var(--font);white-space:nowrap;transition:all .16s;flex-shrink:0;position:relative}
 .ntab:hover{color:#fff;background:rgba(255,255,255,0.09)}
 .ntab.on{color:var(--navy);background:#6fd6b6}
+.nav-tabs{display:flex;align-items:center;gap:3px;flex:1;overflow:visible}
 .nav-r{margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0}
+.nav-burger{display:none;background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px 6px;margin-left:auto;line-height:1}
+/* MOBILE DRAWER */
+.mnav-backdrop{display:none;position:fixed;inset:0;background:rgba(18,20,24,.5);backdrop-filter:blur(2px);z-index:200}
+.mnav-backdrop.open{display:block;animation:fadeIn .18s ease}
+.mnav{display:none;position:fixed;top:0;right:0;bottom:0;width:270px;max-width:82vw;background:var(--navy);z-index:201;flex-direction:column;transform:translateX(100%);transition:transform .24s cubic-bezier(.2,.8,.3,1);box-shadow:-8px 0 30px rgba(0,0,0,.3)}
+.mnav.open{display:flex;transform:none}
+.mnav-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.12);color:#fff;min-height:56px}
+.mnav-head .mc{background:rgba(255,255,255,.12);color:#fff}
+.mnav-items{padding:.75rem;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
+.mnav-item{display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:10px;font-size:14px;font-weight:500;color:rgba(255,255,255,.72);background:transparent;border:none;cursor:pointer;font-family:var(--font);text-align:left;transition:all .15s}
+.mnav-item:hover{background:rgba(255,255,255,.09);color:#fff}
+.mnav-item.on{background:#6fd6b6;color:var(--navy)}
+.mnav-item .mi{font-size:19px;width:22px;text-align:center;flex-shrink:0}
+.mnav-item .badge-n{margin-left:auto;background:#e24b4a;color:#fff;border-radius:11px;padding:1px 8px;font-size:11px;font-weight:600}
+.mnav-sep{height:1px;background:rgba(255,255,255,.1);margin:.5rem .25rem}
+.mnav-auth{margin-top:auto;padding:.9rem;border-top:1px solid rgba(255,255,255,.12)}
 .ubadge{font-size:11px;padding:4px 11px;border-radius:20px;font-weight:500;display:inline-flex;align-items:center;gap:5px}
 .ubadge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.9}
 .ua{background:rgba(111,214,182,0.2);color:#6fd6b6}
@@ -127,6 +145,13 @@ textarea{resize:vertical;min-height:76px}
 .tbl th{text-align:left;font-size:11px;font-weight:600;color:var(--tx3);padding:8px 10px;border-bottom:.5px solid var(--bd);text-transform:uppercase;letter-spacing:.3px}
 .tbl td{padding:10px;border-bottom:.5px solid var(--bd);font-size:13px;vertical-align:middle}
 .tbl tr:last-child td{border-bottom:none}
+/* EXCEL-STYLE TABLE */
+.tbl.xls{font-size:12.5px}
+.tbl.xls th{background:var(--surf2);position:sticky;top:0;white-space:nowrap;padding:9px 10px;border:.5px solid var(--bd);color:var(--tx2)}
+.tbl.xls th:hover{background:var(--surf3)}
+.tbl.xls td{border:.5px solid var(--bd);padding:8px 10px;white-space:nowrap}
+.tbl.xls tbody tr:nth-child(even) td{background:var(--surf2)}
+.tbl.xls tbody tr:hover td{background:var(--accent-soft)}
 
 /* ROW CARD (list items) */
 .rowc{background:var(--surf);border:.5px solid var(--bd);border-left:3px solid var(--bd2);border-radius:var(--r);padding:.9rem 1rem;box-shadow:var(--sh1);transition:box-shadow .18s,transform .18s;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.6rem}
@@ -231,14 +256,26 @@ textarea{resize:vertical;min-height:76px}
 .searchbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .searchbar .grow{flex:1;min-width:180px}
 
+@media(max-width:820px){
+  .nav-tabs,.nav-r{display:none}
+  .nav-burger{display:block}
+  .nav-logo{border-right:none;margin-right:0}
+}
 @media(max-width:640px){
   .g2,.g3,.g4,.hs-grid,.frow{grid-template-columns:1fr}
-  .bar-row{grid-template-columns:76px 1fr 38px}
-  .nav-logo small{display:none}
-  .nav{padding:0 .75rem;gap:2px}
-  .ntab{padding:7px 10px;font-size:12px}
-  .pg{padding:1.1rem .9rem}
-  .modal{padding:1.25rem}
+  .hs-grid{grid-template-columns:1fr 1fr}
+  .bar-row{grid-template-columns:72px 1fr 36px}
+  .nav-logo small{display:block}
+  .nav{padding:0 1rem}
+  .nav-logo{font-size:13px}
+  .pg{padding:1rem .85rem 3rem}
+  .modal{padding:1.25rem;border-radius:16px 16px 0 0;max-height:92vh}
+  .modal-bg{align-items:flex-end;padding:0}
+  .btn{padding:10px 18px}
+  .btn-sm{padding:7px 12px}
+  input,select,textarea{font-size:16px;padding:11px 13px}
+  .rowc{padding:1rem}
+  .searchbar .grow{min-width:100%}
 }
 </style>
 
@@ -256,22 +293,34 @@ textarea{resize:vertical;min-height:76px}
 
 <!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">คณะสัตวแพทยศาสตร์ ม.อ.<small>ระบบแจ้งซ่อมออนไลน์ v3</small></div>
-  <button class="ntab on" onclick="gp('report')">แจ้งซ่อม</button>
-  <button class="ntab" onclick="gp('status')">ติดตามงาน</button>
-  <button class="ntab" onclick="gp('qr')">QR Code</button>
-  <button class="ntab" id="nt-approve" style="display:none" onclick="gp('approve')">
-    อนุมัติ <span id="apv-cnt" style="background:rgba(226,75,74,.3);color:#f09595;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:2px">0</span>
-  </button>
-  <button class="ntab" id="nt-manage" style="display:none" onclick="gp('manage')">จัดการงาน</button>
-  <button class="ntab" id="nt-dash" style="display:none" onclick="gp('dashboard')">Dashboard</button>
-  <button class="ntab" id="nt-cfg" style="display:none" onclick="gp('config')">⚙ ตั้งค่า</button>
+  <div class="nav-logo">คณะสัตวแพทยศาสตร์ ม.อ.<small>ระบบแจ้งซ่อมออนไลน์</small></div>
+  <div class="nav-tabs" id="navTabs">
+    <button class="ntab on" onclick="gp('report')">แจ้งซ่อม</button>
+    <button class="ntab" onclick="gp('status')">ติดตามงาน</button>
+    <button class="ntab" onclick="gp('qr')">QR Code</button>
+    <button class="ntab" id="nt-approve" style="display:none" onclick="gp('approve')">
+      อนุมัติ <span id="apv-cnt" style="background:rgba(226,75,74,.3);color:#f09595;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:2px">0</span>
+    </button>
+    <button class="ntab" id="nt-manage" style="display:none" onclick="gp('manage')">จัดการงาน</button>
+    <button class="ntab" id="nt-dash" onclick="gp('dashboard')">Dashboard</button>
+    <button class="ntab" id="nt-cfg" style="display:none" onclick="gp('config')"><i class="ti ti-settings" style="vertical-align:-1px"></i> ตั้งค่า</button>
+  </div>
   <div class="nav-r">
     <span class="ubadge" id="ubadge" style="display:none"></span>
     <button class="nbtn" id="lbtn" onclick="oLogin()">เข้าสู่ระบบ</button>
     <button class="nbtn" id="lobtn" style="display:none" onclick="doOut()">ออก</button>
   </div>
+  <button class="nav-burger" id="navBurger" onclick="toggleMenu()" aria-label="เมนู"><i class="ti ti-menu-2"></i></button>
 </nav>
+<!-- MOBILE MENU DRAWER -->
+<div class="mnav-backdrop" id="mnavBd" onclick="toggleMenu()"></div>
+<div class="mnav" id="mnav">
+  <div class="mnav-head">
+    <span id="mnav-user" style="font-size:13px;font-weight:600"></span>
+    <button class="mc" onclick="toggleMenu()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="mnav-items" id="mnavItems"></div>
+</div>
 
 <!-- MAIN -->
 <div id="pg" class="pg"></div>
@@ -296,41 +345,72 @@ textarea{resize:vertical;min-height:76px}
 <div class="modal-bg" id="detMd" style="display:none"><div class="modal" id="detContent"></div></div>
 <div class="modal-bg" id="assignMd" style="display:none"><div class="modal" id="assignContent"></div></div>
 <div class="modal-bg" id="statusMd" style="display:none"><div class="modal" id="statusContent"></div></div>
+<div class="modal-bg" id="editMd" style="display:none"><div class="modal" id="editContent"></div></div>
 
 <script>
 // ═══════════════════════════════════════════
 // CONFIG — แก้ GAS_URL หลัง Deploy Apps Script
 // ═══════════════════════════════════════════
 // URL ของ Google Apps Script ฝังไว้ในโปรแกรม (แก้ได้ที่หน้า ⚙ ตั้งค่า)
-const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbz8CIooYTAdS7A7gK1a_-0fkbsYLhUVVq6AcfGcNfQ9N0Rj9q6PoVeygxnMyQWlXmkf0Q/exec';
+const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbyzVnOlb847m9UZa5kzO5jttPDIZ5zr6sJHnZmKeXz29zxcoY43OPFVn0CueanYQvNtPw/exec';
+// ถ้า URL ที่ฝังมาใหม่ไม่ตรงกับที่เคยบันทึกไว้ ให้ยึดตัวใหม่ (กันเครื่องเก่าค้าง URL เดิม)
+(function(){
+  const savedDefault = localStorage.getItem('gas_default');
+  if (savedDefault !== DEFAULT_GAS_URL) {
+    localStorage.removeItem('gas_url');           // ล้างค่าที่ผู้ใช้เคยบันทึกไว้
+    localStorage.setItem('gas_default', DEFAULT_GAS_URL);
+  }
+})();
 let GAS_URL = localStorage.getItem('gas_url') || DEFAULT_GAS_URL;
 
 const USERS = {
-  admin: { pass:'admin1234', name:'นายปณิธาน แก้วเจริญ', role:'admin', color:'#7ecbb4', initials:'ปณ' },
+  admin: { pass:'admin1234', name:'นายปณิธาน แก้วเจริญ', role:'admin', isEngineer:true, color:'#7ecbb4', initials:'ปณ' },
   tech1: { pass:'tech1234',  name:'นายธนกร ไกรดิษฐ์',   role:'admin', color:'#b5d4f4', initials:'ธก', specialty:['ระบบไฟฟ้า','ระบบสื่อสาร/เครือข่าย IT'] },
   tech2: { pass:'tech2234',  name:'นายเอกรัตน์ อุปถัมภ์', role:'admin', color:'#f5c4b3', initials:'อร', specialty:['ระบบประปา/สุขาภิบาล','ระบบปรับอากาศ'] },
 };
-const BUILDINGS = [
+let BUILDINGS = [
   {id:'b1',name:'อาคารจุฬาภรณการุณยรักษ์',icon:'🏢',short:'จุฬาภร',budget:120000},
   {id:'b2',name:'อาคารสหเวชศาสตร์',        icon:'🏛',short:'สหเวช',budget:80000},
   {id:'b3',name:'โรงพยาบาลปศุสัตว์',       icon:'🏥',short:'โรงพยาบาล',budget:200000},
   {id:'b4',name:'อาคารวิจัยสัตวน้ำและสัตว์ปีก',icon:'🔬',short:'วิจัย',budget:100000},
 ];
-const CATS = ['ระบบไฟฟ้า','ระบบประปา/สุขาภิบาล','ระบบปรับอากาศ','งานโครงสร้างอาคาร','ระบบสื่อสาร/เครือข่าย IT','งานครุภัณฑ์/เฟอร์นิเจอร์','อื่นๆ'];
-const STATUSES = [
+let CATS = ['ระบบไฟฟ้า','ระบบประปา/สุขาภิบาล','ระบบปรับอากาศ','งานโครงสร้างอาคาร','ระบบสื่อสาร/เครือข่าย IT','งานครุภัณฑ์/เฟอร์นิเจอร์','อื่นๆ'];
+let STATUSES = [
   {id:'pending_approval',label:'รอวิศวกรอนุมัติ',   cls:'b-amber'},
   {id:'assigned',        label:'มอบหมายแล้ว',       cls:'b-purple'},
   {id:'survey',          label:'กำลังสำรวจหน้างาน', cls:'b-amber'},
   {id:'purchase',        label:'อยู่ระหว่างจัดซื้อ', cls:'b-purple'},
   {id:'working',         label:'กำลังดำเนินการซ่อม', cls:'b-blue'},
+  {id:'insurance',       label:'ส่งประกันเคลม',      cls:'b-teal'},
+  {id:'contractor',      label:'ส่งผู้รับเหมา',       cls:'b-teal'},
   {id:'done',            label:'เสร็จเรียบร้อย',     cls:'b-green'},
   {id:'cannot',          label:'ซ่อมไม่ได้',         cls:'b-red'},
+  {id:'cancelled',       label:'ยกเลิกใบแจ้ง',       cls:'b-gray'},
 ];
-const SLA = {'ระบบไฟฟ้า':5,'ระบบประปา/สุขาภิบาล':5,'ระบบปรับอากาศ':7,'งานโครงสร้างอาคาร':30,'ระบบสื่อสาร/เครือข่าย IT':7,'งานครุภัณฑ์/เฟอร์นิเจอร์':14,'อื่นๆ':14};
+// สถานะที่ส่งงานออกภายนอก — หยุดนับ SLA ชั่วคราว แต่ยังไม่ถือว่าจบงาน
+let SLA_PAUSED = ['insurance','contractor'];
+let CLOSED_STATUS = ['done','cannot','cancelled'];
+let SLA = {'ระบบไฟฟ้า':5,'ระบบประปา/สุขาภิบาล':5,'ระบบปรับอากาศ':7,'งานโครงสร้างอาคาร':30,'ระบบสื่อสาร/เครือข่าย IT':7,'งานครุภัณฑ์/เฟอร์นิเจอร์':14,'อื่นๆ':14};
 
 // ─── STATE ───
 let cu = null, curPage = 'report';
 let DB = { tickets: [], history: {} }; // local cache
+let CFG_RAW = null; // เก็บ config ดิบไว้แก้ในหน้าจัดการระบบ
+// นำ config จาก Sheet มาแทนค่าเริ่มต้น (กรองรายการที่ซ่อนออกจากการใช้งานทั่วไป)
+function applyConfig(cfg){
+  CFG_RAW = cfg;
+  if (cfg.buildings && cfg.buildings.length)
+    BUILDINGS = cfg.buildings.filter(b=>!b.hidden).map(b=>({id:b.id,name:b.name,short:b.short||b.name,icon:b.icon||'🏢',budget:Number(b.budget)||0}));
+  if (cfg.statuses && cfg.statuses.length){
+    STATUSES = cfg.statuses.filter(s=>!s.hidden).map(s=>({id:s.id,label:s.label,cls:s.cls||'b-gray'}));
+    SLA_PAUSED = cfg.statuses.filter(s=>s.paused).map(s=>s.id);
+    CLOSED_STATUS = cfg.statuses.filter(s=>s.closed).map(s=>s.id);
+  }
+  if (cfg.categories && cfg.categories.length){
+    CATS = cfg.categories.filter(c=>!c.hidden).map(c=>c.name);
+    SLA = {}; cfg.categories.forEach(c=>{ SLA[c.name]=Number(c.sla)||14; });
+  }
+}
 
 // ─── API ───
 async function api(action, body={}) {
@@ -358,6 +438,13 @@ async function loadAll() {
     // fallback: use localStorage
     try { DB.tickets = JSON.parse(localStorage.getItem('vr3_t')||'[]'); } catch{}
     DB.tickets.forEach(t => { if(!t.history) t.history=[]; if(!t.assignees) t.assignees=[]; });
+  }
+  // โหลดค่าตั้งค่า (อาคาร/สถานะ/ประเภท) — ถ้าไม่มีใช้ค่าเริ่มต้นในโค้ด
+  try {
+    const cfg = await api('getConfig');
+    if (cfg) { applyConfig(cfg); localStorage.setItem('vr3_cfg', JSON.stringify(cfg)); }
+  } catch(e) {
+    try { const c=JSON.parse(localStorage.getItem('vr3_cfg')||'null'); if(c) applyConfig(c); } catch{}
   }
   hideLoader();
 }
@@ -394,6 +481,22 @@ function getSI(id) { return STATUSES.find(s=>s.id===id)||STATUSES[0]; }
 function getBI(id) { return BUILDINGS.find(b=>b.id===id)||BUILDINGS[0]; }
 function elapsed(iso) { return Math.floor((Date.now()-new Date(iso))/86400000); }
 function getSLA(cat) { return SLA[cat]||14; }
+// จำนวนวันที่งานถูกพัก (ส่งประกัน/ผู้รับเหมา) — คำนวณจากช่วงเวลาในประวัติ
+function pausedDays(t){
+  const h=(t.history||[]).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+  let ms=0;
+  for(let i=0;i<h.length;i++){
+    if(SLA_PAUSED.includes(h[i].status)){
+      const start=new Date(h[i].date);
+      const end=(i+1<h.length)?new Date(h[i+1].date):new Date(); // ถ้ายังพักอยู่ นับถึงตอนนี้
+      ms+=Math.max(0,end-start);
+    }
+  }
+  return Math.floor(ms/86400000);
+}
+// จำนวนวันที่นับ SLA จริง = วันทั้งหมด - วันที่พัก
+function effElapsed(t){ return Math.max(0, elapsed(t.createdAt) - pausedDays(t)); }
+function isOverSLA(t){ if(CLOSED_STATUS.includes(t.status)||SLA_PAUSED.includes(t.status)) return false; return effElapsed(t)>getSLA(t.category); }
 function getUserColor(u) { return USERS[u]?.color||'#ccc'; }
 function getUserInitials(u) { return USERS[u]?.initials||'?'; }
 function getUserName(u) { return USERS[u]?.name||u||'—'; }
@@ -408,7 +511,7 @@ function assigneeChips(assignees) {
 }
 
 function suggestAssignees(cat) {
-  const active = DB.tickets.filter(t=>!['done','cannot'].includes(t.status));
+  const active = DB.tickets.filter(t=>!CLOSED_STATUS.includes(t.status));
   return Object.entries(USERS)
     .map(([u,v]) => {
       const wl = active.filter(t=>(t.assignees||[]).includes(u)).length;
@@ -430,7 +533,7 @@ function showToast(msg, ms=2500) {
 }
 function cm(id) { document.getElementById(id).style.display='none'; }
 window.addEventListener('click', e => {
-  ['loginMd','detMd','assignMd','statusMd'].forEach(id=>{ const el=document.getElementById(id); if(el&&e.target===el) el.style.display='none'; });
+  ['loginMd','detMd','assignMd','statusMd','editMd'].forEach(id=>{ const el=document.getElementById(id); if(el&&e.target===el) el.style.display='none'; });
 });
 function updApvCnt() { const c=DB.tickets.filter(t=>t.status==='pending_approval').length; const el=document.getElementById('apv-cnt'); if(el) el.textContent=c; }
 
@@ -447,26 +550,61 @@ function updAuthUI() {
   const b=document.getElementById('ubadge');
   document.getElementById('lbtn').style.display=cu?'none':'';
   document.getElementById('lobtn').style.display=cu?'':'none';
-  ['nt-approve','nt-manage','nt-dash','nt-cfg'].forEach(id=>document.getElementById(id).style.display='none');
+  ['nt-approve','nt-manage','nt-cfg'].forEach(id=>document.getElementById(id).style.display='none');
   if (cu) {
     b.style.display='inline-block'; b.textContent=cu.name;
     b.className='ubadge '+(cu.role==='admin'?'ua':'ut');
     // ทุกคน role=admin เห็นทุกเมนู
     document.getElementById('nt-approve').style.display='';
     document.getElementById('nt-manage').style.display='';
-    document.getElementById('nt-dash').style.display='';
     document.getElementById('nt-cfg').style.display='';
     updApvCnt();
   } else { b.style.display='none'; }
+  buildMobileMenu();
 }
+
+// ─── MOBILE MENU ───
+const NAV_ITEMS = [
+  {p:'report',   label:'แจ้งซ่อม',    icon:'ti-clipboard-plus', pub:true},
+  {p:'status',   label:'ติดตามงาน',   icon:'ti-list-search',    pub:true},
+  {p:'qr',       label:'QR Code',     icon:'ti-qrcode',         pub:true},
+  {p:'approve',  label:'อนุมัติ',      icon:'ti-circle-check',   pub:false},
+  {p:'manage',   label:'จัดการงาน',    icon:'ti-tool',           pub:false},
+  {p:'dashboard',label:'Dashboard',   icon:'ti-chart-bar',      pub:true},
+  {p:'config',   label:'ตั้งค่า',      icon:'ti-settings',       pub:false},
+];
+function buildMobileMenu() {
+  const box=document.getElementById('mnavItems'); if(!box) return;
+  const apv=DB.tickets.filter(t=>t.status==='pending_approval').length;
+  let html='';
+  NAV_ITEMS.forEach(it=>{
+    if(!it.pub && !cu) return;
+    const badge=(it.p==='approve'&&apv>0)?`<span class="badge-n">${apv}</span>`:'';
+    html+=`<button class="mnav-item ${curPage===it.p?'on':''}" onclick="mNav('${it.p}')"><i class="ti ${it.icon} mi"></i> ${it.label} ${badge}</button>`;
+  });
+  html+='<div class="mnav-sep"></div>';
+  if(cu) html+=`<button class="mnav-item" onclick="doOut();toggleMenu()"><i class="ti ti-logout mi"></i> ออกจากระบบ</button>`;
+  else   html+=`<button class="mnav-item" onclick="toggleMenu();oLogin()"><i class="ti ti-login mi"></i> เข้าสู่ระบบ</button>`;
+  box.innerHTML=html;
+  const u=document.getElementById('mnav-user');
+  if(u) u.innerHTML = cu ? `<i class="ti ti-user-circle" style="vertical-align:-2px;color:#6fd6b6"></i> ${cu.name}` : 'เมนู';
+}
+function toggleMenu() {
+  const bd=document.getElementById('mnavBd'), mn=document.getElementById('mnav');
+  const open=mn.classList.contains('open');
+  if(open){ mn.classList.remove('open'); bd.classList.remove('open'); }
+  else{ buildMobileMenu(); mn.classList.add('open'); bd.classList.add('open'); }
+}
+function mNav(p){ toggleMenu(); gp(p); }
 
 // ─── ROUTER ───
 function gp(p) {
-  if (['approve','manage','dashboard','config'].includes(p) && !cu) { oLogin(); return; }
+  if (['approve','manage','config'].includes(p) && !cu) { oLogin(); return; }
   curPage=p;
   document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
   const map={report:0,status:1,qr:2,approve:3,manage:4,dashboard:5,config:6};
   document.querySelectorAll('.ntab')[map[p]]?.classList.add('on');
+  buildMobileMenu();
   rp();
 }
 function rp() {
@@ -557,8 +695,73 @@ function v(id) { const el=document.getElementById(id); return el?el.value.trim()
 function clrErr(id){ const el=document.getElementById(id),er=document.getElementById('e_'+id); if(el)el.classList.remove('err'); if(er)er.classList.remove('show'); }
 
 // ════════════════════════ PAGE: STATUS ════════════════════════
+// ─── Export Excel / PDF ───
+function exportRows(){
+  const pLbl={high:'เร่งด่วน',med:'ปานกลาง',low:'ปกติ'};
+  return DB.tickets.filter(t=>t.status!=='cancelled')
+    .slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))
+    .map(t=>({
+      'รหัส':t.id,
+      'วันที่แจ้ง':fd(t.createdAt),
+      'อาคาร':getBI(t.building).name,
+      'ห้อง/ชั้น':t.room,
+      'ประเภทงาน':t.category,
+      'ความเร่งด่วน':pLbl[t.priority]||t.priority,
+      'สถานะ':getSI(t.status).label,
+      'ผู้แจ้ง':t.name,
+      'โทรศัพท์':t.phone,
+      'หน่วยงาน':t.dept,
+      'รายละเอียด':t.desc,
+      'ผู้รับผิดชอบ':(t.assignees||[]).map(getUserName).join(', '),
+      'ประมาณการ(บาท)':t.estimatedCost||0,
+      'ค่าใช้จ่ายจริง(บาท)':t.actualCost||0,
+      'นับ SLA(วัน)':CLOSED_STATUS.includes(t.status)?'-':effElapsed(t),
+      'SLA(วัน)':getSLA(t.category),
+      'เกิน SLA':isOverSLA(t)?'เกิน':'',
+      'วันเสร็จ':t.completedAt?fd(t.completedAt):''
+    }));
+}
+function exportExcel(){
+  if(typeof XLSX==='undefined'){ showToast('กำลังโหลดตัวช่วย ลองอีกครั้ง'); return; }
+  const rows=exportRows();
+  if(!rows.length){ showToast('ไม่มีข้อมูลให้ส่งออก'); return; }
+  const ws=XLSX.utils.json_to_sheet(rows);
+  ws['!cols']=Object.keys(rows[0]).map(k=>({wch:k==='รายละเอียด'?40:k==='อาคาร'?24:14}));
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'รายงานแจ้งซ่อม');
+  const d=new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb,`รายงานแจ้งซ่อม_${d}.xlsx`);
+  showToast('ดาวน์โหลด Excel แล้ว');
+}
+function exportPDF(){
+  const rows=exportRows();
+  if(!rows.length){ showToast('ไม่มีข้อมูลให้ส่งออก'); return; }
+  const cols=Object.keys(rows[0]).filter(c=>!['โทรศัพท์','หน่วยงาน','อีเมล'].includes(c));
+  const d=new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  const head=cols.map(c=>`<th>${c}</th>`).join('');
+  const body=rows.map(r=>`<tr>${cols.map(c=>`<td>${(r[c]===0?'0':(r[c]||''))}</td>`).join('')}</tr>`).join('');
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><meta charset="utf-8"><title>รายงานแจ้งซ่อม</title>
+  <style>
+    @page{size:A4 landscape;margin:12mm}
+    body{font-family:'Sarabun','TH SarabunPSK',sans-serif;font-size:11px;color:#111}
+    h2{margin:0 0 2px} .sub{color:#666;font-size:12px;margin-bottom:12px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:0.5px solid #999;padding:4px 6px;text-align:left;vertical-align:top}
+    th{background:#12233b;color:#fff;font-size:10px}
+    tr:nth-child(even) td{background:#f4f4f0}
+  </style></head><body>
+  <h2>รายงานการแจ้งซ่อม — คณะสัตวแพทยศาสตร์ มหาวิทยาลัยสงขลานครินทร์</h2>
+  <div class="sub">พิมพ์เมื่อ ${d} · รวม ${rows.length} รายการ</div>
+  <table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
+  <script>window.onload=function(){window.print();}<\/script>
+  </body></html>`);
+  w.document.close();
+  showToast('เปิดหน้าพิมพ์ — เลือก "บันทึกเป็น PDF"');
+}
+
 function pgStatus() {
-  const tickets=DB.tickets.slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  const tickets=DB.tickets.filter(t=>t.status!=='cancelled').slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   return `<div>
     <div class="card" style="margin-bottom:1rem">
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -573,7 +776,65 @@ function pgStatus() {
       </div>
     </div>
     <div id="stlist">${renderStatusList(tickets)}</div>
+    <div class="card" style="margin-top:1.25rem">
+      <div class="ctitle" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span><i class="ti ti-table" style="color:var(--accent)"></i> ตารางสรุปสถานะ (คลิกหัวคอลัมน์เพื่อเรียง)</span>
+        <span style="display:flex;gap:6px;align-items:center">
+          ${cu?`<button class="btn btn-sm btn-green" onclick="exportExcel()"><i class="ti ti-file-spreadsheet"></i> Excel</button>
+          <button class="btn btn-sm" onclick="exportPDF()"><i class="ti ti-file-type-pdf"></i> PDF</button>`:''}
+          <span style="font-size:11px;font-weight:400;color:var(--tx3)">${tickets.length} รายการ</span>
+        </span>
+      </div>
+      <div style="overflow-x:auto" id="sttable">${renderStatusTable(tickets)}</div>
+    </div>
   </div>`;
+}
+
+let tblSort={key:'createdAt',dir:-1};
+function renderStatusTable(tickets){
+  if(!tickets.length) return `<div class="empty" style="padding:1.5rem"><div class="empty-sub">ไม่มีข้อมูล</div></div>`;
+  const cols=[
+    {k:'id',       label:'รหัส',      w:'110px'},
+    {k:'createdAt',label:'วันที่แจ้ง', w:'130px'},
+    {k:'building', label:'อาคาร',      w:'150px'},
+    {k:'room',     label:'ห้อง',       w:'150px'},
+    {k:'category', label:'ประเภท',     w:'150px'},
+    {k:'priority', label:'เร่งด่วน',    w:'90px'},
+    {k:'status',   label:'สถานะ',      w:'150px'},
+  ];
+  const prioRank={high:3,med:2,low:1};
+  const arr=tickets.slice().sort((a,b)=>{
+    let x,y; const k=tblSort.key;
+    if(k==='priority'){x=prioRank[a.priority]||0;y=prioRank[b.priority]||0;}
+    else if(k==='createdAt'){x=new Date(a.createdAt);y=new Date(b.createdAt);}
+    else if(k==='building'){x=getBI(a.building).short;y=getBI(b.building).short;}
+    else if(k==='status'){x=STATUSES.findIndex(s=>s.id===a.status);y=STATUSES.findIndex(s=>s.id===b.status);}
+    else{x=(a[k]||'').toString();y=(b[k]||'').toString();}
+    if(x<y)return -1*tblSort.dir; if(x>y)return 1*tblSort.dir; return 0;
+  });
+  const arrow=k=>tblSort.key===k?(tblSort.dir===1?' ▲':' ▼'):'';
+  const pLbl={high:'เร่งด่วน',med:'ปานกลาง',low:'ปกติ'};
+  const pCls={high:'b-red',med:'b-amber',low:'b-gray'};
+  return `<table class="tbl xls">
+    <thead><tr>${cols.map(c=>`<th style="min-width:${c.w};cursor:pointer;user-select:none" onclick="sortTable('${c.k}')">${c.label}${arrow(c.k)}</th>`).join('')}</tr></thead>
+    <tbody>${arr.map(t=>{
+      const s=getSI(t.status),b=getBI(t.building),over=isOverSLA(t);
+      return `<tr onclick="openDet('${t.id}')" style="cursor:pointer">
+        <td class="mono">${t.id}</td>
+        <td style="white-space:nowrap">${fd(t.createdAt)}</td>
+        <td>${b.icon} ${b.short}</td>
+        <td>${t.room}</td>
+        <td>${t.category}</td>
+        <td><span class="badge ${pCls[t.priority]} nodot">${pLbl[t.priority]}</span></td>
+        <td><span class="badge ${s.cls}">${s.label}</span>${over?' <span class="badge b-red">เกิน SLA</span>':''}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+function sortTable(k){
+  if(tblSort.key===k) tblSort.dir*=-1; else { tblSort.key=k; tblSort.dir=1; }
+  // re-render using current filter set
+  filterStatus();
 }
 function renderStatusList(tickets) {
   if (!tickets.length) return `<div class="empty"><div class="empty-ic"><i class="ti ti-clipboard-search"></i></div><div class="empty-ttl">ยังไม่มีรายการแจ้งซ่อม</div><div class="empty-sub">เมื่อมีการแจ้งซ่อมเข้ามา รายการจะแสดงที่นี่ พร้อมสถานะและผู้รับผิดชอบ</div></div>`;
@@ -581,7 +842,7 @@ function renderStatusList(tickets) {
     const s=getSI(t.status),b=getBI(t.building);
     const pCls=t.priority==='high'?'b-red':t.priority==='med'?'b-amber':'b-gray';
     const pLbl={high:'เร่งด่วน',med:'ปานกลาง',low:'ปกติ'}[t.priority];
-    const el=elapsed(t.createdAt),sla=getSLA(t.category),over=el>sla&&!['done','cannot'].includes(t.status);
+    const el=effElapsed(t),sla=getSLA(t.category),over=isOverSLA(t);
     const peCls=over?'pe-over':t.priority==='high'?'pe-high':t.priority==='med'?'pe-med':'pe-low';
     return `<div class="rowc ${peCls}">
         <div style="flex:1;min-width:0">
@@ -602,10 +863,12 @@ function renderStatusList(tickets) {
 function filterStatus() {
   const q=(v('sq')||'').toLowerCase(),bl=v('sbld')||'',st2=v('ssta')||'';
   let t=DB.tickets.slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  if(st2!=='cancelled') t=t.filter(x=>x.status!=='cancelled'); // ซ่อนใบยกเลิก เว้นแต่เลือกกรองดูโดยตรง
   if(q) t=t.filter(x=>x.id.toLowerCase().includes(q)||x.name.toLowerCase().includes(q)||getBI(x.building).name.toLowerCase().includes(q));
   if(bl) t=t.filter(x=>x.building===bl);
   if(st2) t=t.filter(x=>x.status===st2);
   document.getElementById('stlist').innerHTML=renderStatusList(t);
+  const tbl=document.getElementById('sttable'); if(tbl) tbl.innerHTML=renderStatusTable(t);
 }
 
 // ════════════════════════ PAGE: QR ════════════════════════
@@ -683,7 +946,7 @@ function pgApprove() {
 function openAssign(id) {
   const t=DB.tickets.find(t=>t.id===id); if(!t) return;
   const suggested=suggestAssignees(t.category);
-  const active=DB.tickets.filter(x=>!['done','cannot'].includes(x.status));
+  const active=DB.tickets.filter(x=>!CLOSED_STATUS.includes(x.status));
   const techList=Object.entries(USERS).map(([u,usr])=>{
     const wl=active.filter(x=>(x.assignees||[]).includes(u)).length;
     const isSugg=suggested.indexOf(u);
@@ -749,9 +1012,9 @@ async function doReject(id) {
 function pgManage() {
   if (!cu) return `<div class="empty">กรุณาเข้าสู่ระบบ</div>`;
   // ทุกคน role=admin เห็นทั้งหมด
-  let tickets=DB.tickets.slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  let tickets=DB.tickets.filter(t=>t.status!=='cancelled').slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   const active=tickets.filter(t=>!['done','cannot','pending_approval'].includes(t.status));
-  const done=tickets.filter(t=>['done','cannot'].includes(t.status));
+  const done=tickets.filter(t=>CLOSED_STATUS.includes(t.status));
   return `<div>
     <div class="notice n-info" style="margin-bottom:1rem;font-size:12px">
       ผู้ใช้: <b>${cu.name}</b> — เห็นและจัดการงานได้ทุกรายการ
@@ -763,7 +1026,7 @@ function pgManage() {
     <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem">
     ${!active.length?`<div class="empty" style="padding:2rem"><div class="empty-ic"><i class="ti ti-checklist"></i></div><div class="empty-ttl">ไม่มีงานที่กำลังดำเนินการ</div><div class="empty-sub">งานที่ได้รับอนุมัติและมอบหมายแล้วจะแสดงที่นี่</div></div>`:''}
     ${active.map(t=>{
-      const s=getSI(t.status),b=getBI(t.building),el=elapsed(t.createdAt),sla=getSLA(t.category),over=el>sla;
+      const s=getSI(t.status),b=getBI(t.building),el=effElapsed(t),pd=pausedDays(t),sla=getSLA(t.category),over=isOverSLA(t);
       return `<div class="card card-sm" style="${over?'border-left:3px solid #e24b4a':''}">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
           <div style="flex:1">
@@ -773,7 +1036,7 @@ function pgManage() {
               ${over?'<span class="badge b-red">เกิน SLA</span>':''}
             </div>
             <div style="font-weight:600;font-size:13px">${b.icon} ${b.name} — ${t.room}</div>
-            <div style="font-size:12px;color:var(--tx2)">${t.category} | ${t.name} | ${el}วัน / SLA ${sla}วัน</div>
+            <div style="font-size:12px;color:var(--tx2)">${t.category} | ${t.name} | นับ SLA ${el} วัน / ${sla} วัน${pd>0?` <span style="color:var(--purple-tx)">(พัก ${pd} วัน)</span>`:''}</div>
             <div style="margin-top:4px">${assigneeChips(t.assignees)}</div>
           </div>
           <div style="display:flex;gap:5px">
@@ -837,12 +1100,12 @@ async function saveStatusUpdate(id) {
 
 // ════════════════════════ PAGE: DASHBOARD ════════════════════════
 function pgDashboard() {
-  if (!cu) return `<div class="empty">กรุณาเข้าสู่ระบบ</div>`;
-  const tickets=DB.tickets;
-  const active=tickets.filter(t=>!['done','cannot'].includes(t.status));
+  const pub=!cu;  // คนทั่วไป (ไม่ login) เห็นเฉพาะภาพรวม ซ่อนงบ/ชื่อช่าง
+  const tickets=DB.tickets.filter(t=>t.status!=='cancelled');  // ไม่นับใบที่ยกเลิก
+  const active=tickets.filter(t=>!CLOSED_STATUS.includes(t.status));
   const done=tickets.filter(t=>t.status==='done');
   const pending=tickets.filter(t=>t.status==='pending_approval');
-  const overSLA=active.filter(t=>elapsed(t.createdAt)>getSLA(t.category));
+  const overSLA=active.filter(t=>isOverSLA(t));
   const budgetData=BUILDINGS.map(b=>{
     const bt=tickets.filter(t=>t.building===b.id);
     const spent=bt.reduce((s,t)=>s+(t.actualCost||0),0);
@@ -850,11 +1113,11 @@ function pgDashboard() {
   });
   const totalBudget=BUILDINGS.reduce((s,b)=>s+b.budget,0);
   const totalSpent=budgetData.reduce((s,b)=>s+b.spent,0);
-  const hotspot=BUILDINGS.map(b=>({...b,count:tickets.filter(t=>t.building===b.id).length,active:tickets.filter(t=>t.building===b.id&&!['done','cannot'].includes(t.status)).length}));
+  const hotspot=BUILDINGS.map(b=>({...b,count:tickets.filter(t=>t.building===b.id).length,active:tickets.filter(t=>t.building===b.id&&!CLOSED_STATUS.includes(t.status)).length}));
   const maxHs=Math.max(...hotspot.map(h=>h.count),1);
   const techLoad=Object.entries(USERS).map(([u,v2])=>{
     const tw=tickets.filter(t=>(t.assignees||[]).includes(u));
-    return{u,v:v2,active:tw.filter(t=>!['done','cannot'].includes(t.status)).length,done:tw.filter(t=>t.status==='done').length,overSla:tw.filter(t=>!['done','cannot'].includes(t.status)&&elapsed(t.createdAt)>getSLA(t.category)).length};
+    return{u,v:v2,active:tw.filter(t=>!CLOSED_STATUS.includes(t.status)).length,done:tw.filter(t=>t.status==='done').length,overSla:tw.filter(t=>isOverSLA(t)).length};
   });
   const maxLoad=Math.max(...techLoad.map(t=>t.active),1);
   const catData=CATS.map(c=>({name:c,count:tickets.filter(t=>t.category===c).length})).sort((a,b)=>b.count-a.count);
@@ -864,14 +1127,15 @@ function pgDashboard() {
   recurring.sort((a,b)=>b.count-a.count);
 
   return `<div>
+    ${pub?`<div class="notice n-info" style="margin-bottom:1rem"><i class="ti ti-info-circle ni"></i><div>ภาพรวมสถิติการแจ้งซ่อม (ข้อมูลสาธารณะ) — เจ้าหน้าที่เข้าสู่ระบบเพื่อดูงบประมาณและรายละเอียดเพิ่มเติม</div></div>`:''}
     <div class="g4" style="margin-bottom:1rem">
       <div class="stat"><div class="stat-lbl">งานทั้งหมด</div><div class="stat-n">${tickets.length}</div></div>
       <div class="stat"><div class="stat-lbl">กำลังดำเนินการ</div><div class="stat-n" style="color:var(--blue)">${active.length}</div><div class="stat-sub">รออนุมัติ ${pending.length}</div></div>
       <div class="stat"><div class="stat-lbl">เสร็จสิ้น</div><div class="stat-n" style="color:var(--green)">${done.length}</div><div class="stat-sub">${tickets.length?Math.round(done.length/tickets.length*100):0}%</div></div>
       <div class="stat"><div class="stat-lbl">เกิน SLA</div><div class="stat-n" style="color:var(--red)">${overSLA.length}</div></div>
     </div>
-    <div class="g2" style="margin-bottom:1rem">
-      <div class="card">
+    <div class="${pub?'':'g2'}" style="margin-bottom:1rem">
+      ${pub?'':`<div class="card">
         <div class="ctitle">💰 งบประมาณรายอาคาร</div>
         <div class="stat" style="margin-bottom:.75rem">
           <div class="stat-lbl">ใช้จ่ายรวม</div>
@@ -886,7 +1150,7 @@ function pgDashboard() {
           <div style="font-size:10px;color:var(--tx3);margin-top:2px">${b.spent.toLocaleString()} / ${b.budget.toLocaleString()} บาท</div></div>
           <div class="bar-val">${b.pct}%</div>
         </div>`).join('')}</div>
-      </div>
+      </div>`}
       <div class="card">
         <div class="ctitle">🔥 Hotspot รายอาคาร</div>
         <div class="hs-grid" style="margin-bottom:.75rem">${hotspot.map(h=>{
@@ -899,8 +1163,8 @@ function pgDashboard() {
         ${recurring.length?`<div style="font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:6px">ปัญหาซ้ำซาก</div>${recurring.slice(0,3).map(r=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid var(--bd);font-size:12px"><span>${r.building.icon} ${r.building.short} — ${r.cat}</span><span class="badge b-red">${r.count} ครั้ง</span></div>`).join('')}`:''}
       </div>
     </div>
-    <div class="g2">
-      <div class="card">
+    <div class="${pub?'':'g2'}">
+      ${pub?'':`<div class="card">
         <div class="ctitle">👷 ภาระงานแต่ละคน</div>
         ${techLoad.map(t=>{
           const pct=maxLoad?Math.round(t.active/maxLoad*100):0,wlColor=pct>80?'#e24b4a':pct>50?'#ef9f27':'#3b6d11';
@@ -919,7 +1183,7 @@ function pgDashboard() {
             <div style="font-size:20px;font-weight:700;color:${wlColor};font-family:var(--mono);min-width:28px;text-align:right">${t.active}</div>
           </div>`;
         }).join('')}
-      </div>
+      </div>`}
       <div class="card">
         <div class="ctitle">📊 งานแยกตามประเภท</div>
         <div class="bar-wrap">${catData.map(c=>{const pct=Math.round(c.count/maxCat*100);return `<div class="bar-row"><div class="bar-lbl">${c.name.replace('งาน','').replace('ระบบ','')}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:#185fa5"></div></div><div class="bar-val">${c.count}</div></div>`;}).join('')}</div>
@@ -958,6 +1222,7 @@ function pgConfig() {
       </div>
       <div id="cfgMsg" style="margin-top:.75rem"></div>
     </div>
+    ${cu&&cu.isEngineer?renderAdminManage():`<div class="notice n-info" style="margin-bottom:1rem"><i class="ti ti-lock ni"></i><div>การจัดการอาคาร/สถานะ/ประเภทงาน สงวนสำหรับวิศวกรเท่านั้น</div></div>`}
     <div class="card">
       <div class="ctitle">ข้อมูลระบบ</div>
       <div style="font-size:13px;color:var(--tx2);line-height:2">
@@ -969,6 +1234,124 @@ function pgConfig() {
       <button class="btn btn-sm btn-red" onclick="if(confirm('ล้างข้อมูลทั้งหมดใน localStorage?')){localStorage.removeItem('vr3_t');DB.tickets=[];rp();}">🗑 ล้างข้อมูล localStorage</button>
     </div>
   </div>`;
+}
+
+// ─── หน้าจัดการระบบ (เฉพาะวิศวกร) ───
+function renderAdminManage(){
+  const cfg = CFG_RAW || {
+    buildings: BUILDINGS.map(b=>({...b,hidden:false})),
+    statuses:  STATUSES.map(s=>({...s,paused:SLA_PAUSED.includes(s.id),closed:CLOSED_STATUS.includes(s.id),hidden:false})),
+    categories:CATS.map(c=>({name:c,sla:SLA[c]||14,hidden:false})),
+  };
+  // นับการใช้งานจริงเพื่อกันลบของที่ถูกใช้
+  const usedB={},usedS={},usedC={};
+  DB.tickets.forEach(t=>{usedB[t.building]=1;usedS[t.status]=1;usedC[t.category]=1;});
+
+  const bRows = cfg.buildings.map((b,i)=>`<tr>
+    <td><input value="${escAttr(b.icon||'')}" style="width:42px;text-align:center" onchange="cfgEdit('buildings',${i},'icon',this.value)"></td>
+    <td><input value="${escAttr(b.name)}" onchange="cfgEdit('buildings',${i},'name',this.value)"></td>
+    <td><input value="${escAttr(b.short||'')}" style="width:80px" onchange="cfgEdit('buildings',${i},'short',this.value)"></td>
+    <td><input type="number" value="${b.budget||0}" style="width:90px" onchange="cfgEdit('buildings',${i},'budget',this.value)"></td>
+    <td style="text-align:center">${cfgToggle('buildings',i,'hidden',b.hidden,usedB[b.id])}</td>
+  </tr>`).join('');
+
+  const sRows = cfg.statuses.map((s,i)=>`<tr>
+    <td><input value="${escAttr(s.label)}" onchange="cfgEdit('statuses',${i},'label',this.value)"></td>
+    <td>${cfgClsSelect('statuses',i,s.cls)}</td>
+    <td style="text-align:center">${cfgToggle('statuses',i,'paused',s.paused)}</td>
+    <td style="text-align:center">${cfgToggle('statuses',i,'closed',s.closed)}</td>
+    <td style="text-align:center">${cfgToggle('statuses',i,'hidden',s.hidden,usedS[s.id])}</td>
+  </tr>`).join('');
+
+  const cRows = cfg.categories.map((c,i)=>`<tr>
+    <td><input value="${escAttr(c.name)}" onchange="cfgEdit('categories',${i},'name',this.value)"></td>
+    <td><input type="number" value="${c.sla||14}" style="width:70px" onchange="cfgEdit('categories',${i},'sla',this.value)"> วัน</td>
+    <td style="text-align:center">${cfgToggle('categories',i,'hidden',c.hidden,usedC[c.name])}</td>
+  </tr>`).join('');
+
+  return `<div class="card" style="margin-bottom:1rem">
+    <div class="ctitle" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span><i class="ti ti-building-cog" style="color:var(--accent)"></i> จัดการอาคาร</span>
+      <button class="btn btn-sm" onclick="cfgAdd('buildings')"><i class="ti ti-plus"></i> เพิ่มอาคาร</button>
+    </div>
+    <div style="overflow-x:auto"><table class="tbl xls"><thead><tr><th>ไอคอน</th><th>ชื่ออาคาร</th><th>ชื่อย่อ</th><th>งบ/ปี</th><th>ซ่อน</th></tr></thead><tbody>${bRows}</tbody></table></div>
+    <div style="font-size:11px;color:var(--tx3);margin-top:6px">* อาคารที่มีงานใช้อยู่จะซ่อนได้อย่างเดียว ลบไม่ได้ (กันข้อมูลเก่าเพี้ยน)</div>
+  </div>
+  <div class="card" style="margin-bottom:1rem">
+    <div class="ctitle" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span><i class="ti ti-list-check" style="color:var(--accent)"></i> จัดการสถานะงาน</span>
+      <button class="btn btn-sm" onclick="cfgAdd('statuses')"><i class="ti ti-plus"></i> เพิ่มสถานะ</button>
+    </div>
+    <div style="overflow-x:auto"><table class="tbl xls"><thead><tr><th>ชื่อสถานะ</th><th>สี</th><th>พัก SLA</th><th>จบงาน</th><th>ซ่อน</th></tr></thead><tbody>${sRows}</tbody></table></div>
+    <div style="font-size:11px;color:var(--tx3);margin-top:6px">* "พัก SLA" = หยุดนับเวลา (เช่น ประกัน/ผู้รับเหมา) · "จบงาน" = นับเป็นงานสิ้นสุด</div>
+  </div>
+  <div class="card" style="margin-bottom:1rem">
+    <div class="ctitle" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span><i class="ti ti-category" style="color:var(--accent)"></i> จัดการประเภทงาน + SLA</span>
+      <button class="btn btn-sm" onclick="cfgAdd('categories')"><i class="ti ti-plus"></i> เพิ่มประเภท</button>
+    </div>
+    <div style="overflow-x:auto"><table class="tbl xls"><thead><tr><th>ประเภทงาน</th><th>SLA</th><th>ซ่อน</th></tr></thead><tbody>${cRows}</tbody></table></div>
+  </div>
+  <div class="card" style="margin-bottom:1rem;text-align:center">
+    <button class="btn btn-accent" onclick="saveAdminConfig()"><i class="ti ti-device-floppy"></i> บันทึกการตั้งค่าทั้งหมด</button>
+    <div id="admCfgMsg" style="margin-top:.6rem"></div>
+    <div style="font-size:11px;color:var(--tx3);margin-top:6px">การเปลี่ยนแปลงจะมีผลกับทุกคนหลังบันทึกและรีเฟรช</div>
+  </div>`;
+}
+
+// working copy สำหรับแก้ก่อนบันทึก
+let cfgDraft=null;
+function ensureDraft(){
+  if(!cfgDraft){
+    const src = CFG_RAW || {
+      buildings: BUILDINGS.map(b=>({...b,hidden:false})),
+      statuses:  STATUSES.map(s=>({...s,paused:SLA_PAUSED.includes(s.id),closed:CLOSED_STATUS.includes(s.id),hidden:false})),
+      categories:CATS.map(c=>({name:c,sla:SLA[c]||14,hidden:false})),
+    };
+    cfgDraft = JSON.parse(JSON.stringify(src));
+  }
+  return cfgDraft;
+}
+function cfgEdit(kind,i,field,val){
+  const d=ensureDraft();
+  if(field==='budget'||field==='sla') val=Number(val)||0;
+  d[kind][i][field]=val;
+}
+function cfgToggle(kind,i,field,cur,used){
+  const dis = (field==='hidden'&&used)?'':''; // ซ่อนได้เสมอ
+  return `<label style="cursor:pointer"><input type="checkbox" ${cur?'checked':''} onchange="cfgEdit('${kind}',${i},'${field}',this.checked)" style="width:auto;accent-color:var(--accent)"></label>`;
+}
+function cfgClsSelect(kind,i,cur){
+  const opts=[['b-blue','ฟ้า'],['b-green','เขียว'],['b-amber','เหลือง'],['b-red','แดง'],['b-purple','ม่วง'],['b-teal','เขียวน้ำทะเล'],['b-gray','เทา']];
+  return `<select onchange="cfgEdit('${kind}',${i},'cls',this.value)" style="width:120px">${opts.map(o=>`<option value="${o[0]}" ${cur===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select>`;
+}
+function cfgAdd(kind){
+  const d=ensureDraft();
+  if(kind==='buildings') d.buildings.push({id:'b'+Date.now().toString(36),name:'อาคารใหม่',short:'ใหม่',icon:'🏢',budget:0,hidden:false});
+  else if(kind==='statuses') d.statuses.push({id:'st'+Date.now().toString(36),label:'สถานะใหม่',cls:'b-gray',paused:false,closed:false,hidden:false});
+  else d.categories.push({name:'ประเภทใหม่',sla:14,hidden:false});
+  CFG_RAW = d; rp();
+}
+async function saveAdminConfig(){
+  const d=ensureDraft();
+  const msg=document.getElementById('admCfgMsg');
+  // validation เบื้องต้น
+  for(const b of d.buildings){ if(!b.name.trim()){ msg.innerHTML='<div class="notice n-red" style="margin:0">ชื่ออาคารห้ามว่าง</div>'; return; } }
+  for(const s of d.statuses){ if(!s.label.trim()){ msg.innerHTML='<div class="notice n-red" style="margin:0">ชื่อสถานะห้ามว่าง</div>'; return; } }
+  for(const c of d.categories){ if(!c.name.trim()){ msg.innerHTML='<div class="notice n-red" style="margin:0">ชื่อประเภทห้ามว่าง</div>'; return; } }
+  showLoader('กำลังบันทึกการตั้งค่า...');
+  try{
+    if(GAS_URL) await api('saveConfig',{config:d});
+    localStorage.setItem('vr3_cfg',JSON.stringify(d));
+    applyConfig(d);
+    cfgDraft=null;
+    hideLoader();
+    msg.innerHTML='<div class="notice n-green" style="margin:0">บันทึกสำเร็จ — มีผลกับทุกคนแล้ว</div>';
+    showToast('บันทึกการตั้งค่าแล้ว');
+  }catch(e){
+    hideLoader();
+    msg.innerHTML=`<div class="notice n-red" style="margin:0">บันทึกไม่สำเร็จ: ${e.message}</div>`;
+  }
 }
 
 function saveGasUrl() {
@@ -1011,6 +1394,10 @@ async function testConnection() {
 // ════════════════════════ DETAIL MODAL ════════════════════════
 function statusPipe(cur){
   if(cur==='cannot') return '<div class="notice n-red" style="margin-bottom:1rem"><i class="ti ti-ban ni"></i><div>งานนี้ไม่สามารถดำเนินการได้</div></div>';
+  if(SLA_PAUSED.includes(cur)){
+    const t=cur==='insurance'?'ส่งเรื่องประกันเคลม':'ส่งงานให้ผู้รับเหมาภายนอก';
+    return `<div class="notice n-purple" style="margin-bottom:1rem"><i class="ti ti-clock-pause ni"></i><div><b>${t}</b> — อยู่ระหว่างประสานงานภายนอก (พัก SLA ชั่วคราว) โดยช่าง/วิศวกรผู้รับผิดชอบเป็นผู้ประสานงาน</div></div>`;
+  }
   const flow=['pending_approval','assigned','survey','purchase','working','done'];
   const short={pending_approval:'รออนุมัติ',assigned:'มอบหมาย',survey:'สำรวจ',purchase:'จัดซื้อ',working:'ซ่อม',done:'เสร็จ'};
   const ci=flow.indexOf(cur);
@@ -1024,6 +1411,74 @@ function statusPipe(cur){
     </div>`;
   }).join('')}</div><div style="height:1px;background:var(--bd);margin:0 0 1rem"></div>`;
 }
+// ─── แก้ไข / ยกเลิกใบแจ้งซ่อม (เฉพาะวิศวกร) ───
+function openEdit(id){
+  if(!cu||!cu.isEngineer){ showToast('เฉพาะวิศวกรเท่านั้นที่แก้ไขได้'); return; }
+  const t=DB.tickets.find(t=>t.id===id); if(!t) return;
+  document.getElementById('editContent').innerHTML=`
+    <div class="modal-title">แก้ไขใบแจ้งซ่อม <button class="mc" onclick="cm('editMd')"><i class="ti ti-x"></i></button></div>
+    <div style="background:var(--surf2);border-radius:8px;padding:.6rem .75rem;margin-bottom:1rem;font-size:12px;color:var(--tx2)"><span class="mono">${t.id}</span></div>
+    <div class="frow">
+      <div class="ff" style="margin:0"><label>ชื่อ-นามสกุล</label><input id="edN" value="${escAttr(t.name)}"></div>
+      <div class="ff" style="margin:0"><label>โทรศัพท์</label><input id="edP" value="${escAttr(t.phone)}"></div>
+    </div>
+    <div class="frow" style="margin-top:.75rem">
+      <div class="ff" style="margin:0"><label>ตำแหน่ง/หน่วยงาน</label><input id="edD" value="${escAttr(t.dept)}"></div>
+      <div class="ff" style="margin:0"><label>อีเมล</label><input id="edE" value="${escAttr(t.email)}"></div>
+    </div>
+    <div class="frow" style="margin-top:.75rem">
+      <div class="ff" style="margin:0"><label>อาคาร</label>
+        <select id="edB">${BUILDINGS.map(b=>`<option value="${b.id}" ${t.building===b.id?'selected':''}>${b.name}</option>`).join('')}</select>
+      </div>
+      <div class="ff" style="margin:0"><label>ห้อง / ชั้น</label><input id="edR" value="${escAttr(t.room)}"></div>
+    </div>
+    <div class="frow" style="margin-top:.75rem">
+      <div class="ff" style="margin:0"><label>ประเภทงาน</label>
+        <select id="edC">${CATS.map(c=>`<option ${t.category===c?'selected':''}>${c}</option>`).join('')}</select>
+      </div>
+      <div class="ff" style="margin:0"><label>ความเร่งด่วน</label>
+        <select id="edPr"><option value="low" ${t.priority==='low'?'selected':''}>ปกติ</option><option value="med" ${t.priority==='med'?'selected':''}>ปานกลาง</option><option value="high" ${t.priority==='high'?'selected':''}>เร่งด่วน/ความปลอดภัย</option></select>
+      </div>
+    </div>
+    <div class="ff" style="margin-top:.25rem"><label>ค่าใช้จ่ายประมาณการ (บาท)</label><input id="edCost" type="number" value="${t.estimatedCost||0}"></div>
+    <div class="ff"><label>รายละเอียดปัญหา</label><textarea id="edDesc">${escHtml(t.desc)}</textarea></div>
+    <button class="btn btn-p btn-block" onclick="saveEdit('${id}')"><i class="ti ti-device-floppy"></i> บันทึกการแก้ไข</button>`;
+  document.getElementById('detMd').style.display='none';
+  document.getElementById('editMd').style.display='flex';
+}
+function escAttr(s){return (s||'').replace(/"/g,'&quot;');}
+function escHtml(s){return (s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+async function saveEdit(id){
+  const t=DB.tickets.find(t=>t.id===id); if(!t) return;
+  const fields={
+    name:v('edN'), phone:v('edP'), dept:v('edD'), email:v('edE'),
+    building:document.getElementById('edB').value, room:v('edR'),
+    category:document.getElementById('edC').value, priority:document.getElementById('edPr').value,
+    estimatedCost:parseFloat(document.getElementById('edCost').value)||0, desc:v('edDesc')
+  };
+  Object.assign(t, fields);
+  const entry={status:t.status,date:now(),note:`วิศวกรแก้ไขข้อมูลใบแจ้งซ่อม`,by:cu.name};
+  if(!t.history)t.history=[]; t.history.push(entry);
+  showLoader('กำลังบันทึก...');
+  await syncUpdate(id, fields, entry);
+  hideLoader(); cm('editMd'); rp();
+  showToast('บันทึกการแก้ไขแล้ว');
+}
+
+async function cancelTicket(id){
+  if(!cu||!cu.isEngineer){ showToast('เฉพาะวิศวกรเท่านั้นที่ยกเลิกได้'); return; }
+  const reason=prompt('เหตุผลที่ยกเลิกใบแจ้งซ่อมนี้:'); if(reason===null) return;
+  const t=DB.tickets.find(t=>t.id===id); if(!t) return;
+  t.status='cancelled';
+  const entry={status:'cancelled',date:now(),note:'ยกเลิกใบแจ้ง: '+(reason||'-'),by:cu.name};
+  if(!t.history)t.history=[]; t.history.push(entry);
+  showLoader('กำลังบันทึก...');
+  await syncUpdate(id,{status:'cancelled'},entry);
+  hideLoader(); cm('detMd'); updApvCnt(); rp();
+  showToast('ยกเลิกใบแจ้งซ่อมแล้ว');
+}
+
 function openDet(id) {
   const t=DB.tickets.find(t=>t.id===id);if(!t)return;
   const s=getSI(t.status),b=getBI(t.building),pLbl={high:'เร่งด่วน',med:'ปานกลาง',low:'ปกติ'}[t.priority];
@@ -1045,6 +1500,11 @@ function openDet(id) {
     </table>
     <div style="font-size:12px;color:var(--tx3);margin-bottom:4px">รายละเอียด</div>
     <div style="font-size:13px;background:var(--surf2);border-radius:8px;padding:.75rem;margin-bottom:1rem;line-height:1.6">${t.desc}</div>
+    ${cu&&cu.isEngineer&&t.status!=='cancelled'?`<div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+      <button class="btn btn-sm" onclick="openEdit('${t.id}')"><i class="ti ti-edit"></i> แก้ไขใบแจ้ง</button>
+      <button class="btn btn-sm btn-red" onclick="cancelTicket('${t.id}')"><i class="ti ti-ban"></i> ยกเลิกใบแจ้ง</button>
+    </div>`:''}
+    ${t.status==='cancelled'?`<div class="notice n-red" style="margin-bottom:1rem"><i class="ti ti-ban ni"></i><div>ใบแจ้งซ่อมนี้ถูกยกเลิกแล้ว (เก็บไว้เป็นประวัติ)</div></div>`:''}
     <div style="font-size:12px;font-weight:600;color:var(--tx3);margin-bottom:8px">ประวัติดำเนินงาน</div>
     ${(t.history||[]).map((h,i,arr)=>{const si=getSI(h.status);return `<div class="tl-item">
       <div class="tl-rail">

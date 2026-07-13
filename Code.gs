@@ -31,11 +31,13 @@ function handleRequest(e) {
 
     let result;
     switch (action) {
-      case 'init':       result = initSheets();                        break;
+      case 'init':       result = initSheets(); initConfigSheets();     break;
       case 'getAll':     result = getAllTickets();                      break;
       case 'add':        result = addTicket(body.ticket);               break;
       case 'update':     result = updateTicket(body.id, body.fields);  break;
       case 'addHistory': result = addHistory(body.ticketId, body.entry); break;
+      case 'getConfig':  result = getConfig();                          break;
+      case 'saveConfig': result = saveConfig(body.config);              break;
       default:           result = { error: 'Unknown action: ' + action };
     }
 
@@ -89,6 +91,92 @@ function initSheets() {
   }
 
   return { message: 'Sheets initialized successfully' };
+}
+
+// ═══════════ ระบบตั้งค่า (อาคาร / สถานะ / ประเภทงาน) ═══════════
+const DEFAULT_BUILDINGS = [
+  ['b1','อาคารจุฬาภรณการุณยรักษ์','จุฬาภร','🏢',120000,'FALSE'],
+  ['b2','อาคารสหเวชศาสตร์','สหเวช','🏛',80000,'FALSE'],
+  ['b3','โรงพยาบาลปศุสัตว์','โรงพยาบาล','🏥',200000,'FALSE'],
+  ['b4','อาคารวิจัยสัตวน้ำและสัตว์ปีก','วิจัย','🔬',100000,'FALSE'],
+];
+const DEFAULT_STATUSES = [
+  ['pending_approval','รอวิศวกรอนุมัติ','b-amber','FALSE','FALSE','FALSE'],
+  ['assigned','มอบหมายแล้ว','b-purple','FALSE','FALSE','FALSE'],
+  ['survey','กำลังสำรวจหน้างาน','b-amber','FALSE','FALSE','FALSE'],
+  ['purchase','อยู่ระหว่างจัดซื้อ','b-purple','FALSE','FALSE','FALSE'],
+  ['working','กำลังดำเนินการซ่อม','b-blue','FALSE','FALSE','FALSE'],
+  ['insurance','ส่งประกันเคลม','b-teal','TRUE','FALSE','FALSE'],
+  ['contractor','ส่งผู้รับเหมา','b-teal','TRUE','FALSE','FALSE'],
+  ['done','เสร็จเรียบร้อย','b-green','FALSE','TRUE','FALSE'],
+  ['cannot','ซ่อมไม่ได้','b-red','FALSE','TRUE','FALSE'],
+  ['cancelled','ยกเลิกใบแจ้ง','b-gray','FALSE','TRUE','FALSE'],
+];
+const DEFAULT_CATEGORIES = [
+  ['ระบบไฟฟ้า',5,'FALSE'],
+  ['ระบบประปา/สุขาภิบาล',5,'FALSE'],
+  ['ระบบปรับอากาศ',7,'FALSE'],
+  ['งานโครงสร้างอาคาร',30,'FALSE'],
+  ['ระบบสื่อสาร/เครือข่าย IT',7,'FALSE'],
+  ['งานครุภัณฑ์/เฟอร์นิเจอร์',14,'FALSE'],
+  ['อื่นๆ',14,'FALSE'],
+];
+const CFG = {
+  buildings:  { sheet:'Buildings',  headers:['ID','Name','Short','Icon','Budget','Hidden'],        seed:DEFAULT_BUILDINGS },
+  statuses:   { sheet:'Statuses',   headers:['ID','Label','Class','Paused','Closed','Hidden'],       seed:DEFAULT_STATUSES },
+  categories: { sheet:'Categories', headers:['Name','SLA','Hidden'],                                 seed:DEFAULT_CATEGORIES },
+};
+
+function initConfigSheets() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  Object.keys(CFG).forEach(function(k){
+    const c = CFG[k];
+    let sh = ss.getSheetByName(c.sheet);
+    if (!sh) {
+      sh = ss.insertSheet(c.sheet);
+      sh.appendRow(c.headers);
+      sh.getRange(1,1,1,c.headers.length).setBackground('#0f6e56').setFontColor('#FFFFFF').setFontWeight('bold');
+      sh.setFrozenRows(1);
+      c.seed.forEach(function(row){ sh.appendRow(row); });
+    }
+  });
+  return { message: 'Config sheets ready' };
+}
+
+function getConfig() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  // สร้าง+seed ถ้ายังไม่มี
+  const missing = Object.keys(CFG).some(function(k){ return !ss.getSheetByName(CFG[k].sheet); });
+  if (missing) initConfigSheets();
+
+  function read(k){
+    const c = CFG[k];
+    const sh = ss.getSheetByName(c.sheet);
+    const d = sh.getDataRange().getValues();
+    const out = [];
+    for (let i=1;i<d.length;i++){ if(d[i][0]==='' || d[i][0]===null) continue; out.push(d[i]); }
+    return out;
+  }
+  const B = read('buildings').map(function(r){ return {id:String(r[0]),name:r[1],short:r[2],icon:r[3],budget:Number(r[4])||0,hidden:String(r[5]).toUpperCase()==='TRUE'}; });
+  const S = read('statuses').map(function(r){ return {id:String(r[0]),label:r[1],cls:r[2],paused:String(r[3]).toUpperCase()==='TRUE',closed:String(r[4]).toUpperCase()==='TRUE',hidden:String(r[5]).toUpperCase()==='TRUE'}; });
+  const C = read('categories').map(function(r){ return {name:String(r[0]),sla:Number(r[1])||14,hidden:String(r[2]).toUpperCase()==='TRUE'}; });
+  return { buildings:B, statuses:S, categories:C };
+}
+
+function saveConfig(cfg) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  initConfigSheets();
+  function writeAll(k, rows){
+    const c = CFG[k];
+    const sh = ss.getSheetByName(c.sheet);
+    const last = sh.getLastRow();
+    if (last > 1) sh.getRange(2,1,last-1,c.headers.length).clearContent();
+    if (rows.length) sh.getRange(2,1,rows.length,c.headers.length).setValues(rows);
+  }
+  if (cfg.buildings) writeAll('buildings', cfg.buildings.map(function(b){ return [b.id,b.name,b.short,b.icon,b.budget||0, b.hidden?'TRUE':'FALSE']; }));
+  if (cfg.statuses)  writeAll('statuses',  cfg.statuses.map(function(s){ return [s.id,s.label,s.cls,s.paused?'TRUE':'FALSE',s.closed?'TRUE':'FALSE',s.hidden?'TRUE':'FALSE']; }));
+  if (cfg.categories)writeAll('categories',cfg.categories.map(function(c){ return [c.name,c.sla||14,c.hidden?'TRUE':'FALSE']; }));
+  return { message: 'Config saved' };
 }
 
 // ─── getAllTickets ──────────────────────────────────────────
@@ -202,9 +290,19 @@ function updateTicket(id, fields) {
 
   const data   = ts.getDataRange().getValues();
   const colMap = {
+    name:           3,
+    phone:          4,
+    dept:           5,
+    email:          6,
+    building:       7,
+    room:           8,
+    category:       9,
+    priority:       10,
+    desc:           11,
+    estimatedCost:  12,
+    actualCost:     13,
     status:         14,
     assignees:      15,
-    actualCost:     13,
     approvedAt:     16,
     approvedBy:     17,
     approvedBudget: 18,
